@@ -4,12 +4,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Duration {
-	static int interval = 20;
+	static int seconds;
 	static Timer timer = new Timer();
     private int delay = 1000;
     private int period = 1000;
 
-	Duration(){
+	Duration(int seconds){
+		this.seconds = seconds;
+		
 		timer.scheduleAtFixedRate(new TimerTask() {
 
 	        public void run() {
@@ -20,8 +22,8 @@ public class Duration {
 	}
 
 	private static final int setInterval() {
-	    if (interval == 1)
+	    if (seconds == 1)
 	        timer.cancel();
-	    return --interval;
+	    return --seconds;
 	}
 }
