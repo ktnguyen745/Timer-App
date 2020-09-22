@@ -13,6 +13,10 @@ public class Task {
 		this.duration = duration;
 	}
 	
+	public String toString() {
+		return name;
+	}
+	
 	// Getters and Setters
 	public Duration duration() {
 		return duration;
