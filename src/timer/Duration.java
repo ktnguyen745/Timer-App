@@ -4,26 +4,46 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Duration {
-	static int seconds;
-	static Timer timer = new Timer();
-    private int delay = 1000;
-    private int period = 1000;
+	// Change to final at some point
+	private int secondsDelay = 1000;
+	private int secondsPeriod = 1000;
 
-	Duration(int seconds){
+	private int minutes;
+	private int seconds;
+	private Timer timer = new Timer();
+
+	public Duration(int minutes, int seconds) {
+		this.minutes = minutes;
 		this.seconds = seconds;
-		
+	}
+	
+	public void run() {
 		timer.scheduleAtFixedRate(new TimerTask() {
 
-	        public void run() {
-	            System.out.println(setInterval());
-
-	        }
-	    }, delay, period);	
+			public void run() {
+				System.out.println(getMinutes() + " : " + setInterval());
+			}
+		}, secondsDelay, secondsPeriod);	
 	}
 
-	private static final int setInterval() {
-	    if (seconds == 1)
-	        timer.cancel();
-	    return --seconds;
+	public int getMinutes() {
+		return minutes;
+	}
+	
+	private final int setInterval() {
+		if (seconds == 1 && minutes == 0) {
+			timer.cancel();
+		}
+
+		switch(seconds) {
+			case 1:
+				--minutes;
+				break;
+			case 0:	
+				seconds = 60;
+				break;
+		}
+		
+		return --seconds;
 	}
 }
