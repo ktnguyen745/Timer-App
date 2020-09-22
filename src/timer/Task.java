@@ -28,6 +28,10 @@ public class Task {
 //		time.start();
 	}
 	
+	public String toString() {
+		return name;
+	}
+	
 	// Getters and Setters
 	public Time time() {
 		return time;
