@@ -5,19 +5,25 @@ public class Task {
 	// Instance Variables
 	private Duration duration;
 	private String name;
+	private boolean isComplete;
 	
+	// Constructors
+	public Task(String name, Duration duration) {
+		this.name = name;
+		this.duration = duration;
+	}
 	
 	// Getters and Setters
-	public Duration getDuration() {
+	public Duration duration() {
 		return duration;
 	}
 	public void setDuration(Duration duration) {
 		this.duration = duration;
 	}
-	public String getName() {
+	public String name() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public boolean isComplete() {
+		return isComplete;
 	}
 }
