@@ -13,8 +13,9 @@ public class Task {
 		this.duration = duration;
 	}
 	
+	// toString
 	public String toString() {
-		return name;
+		return name + "," + duration.toString();
 	}
 	
 	// Getters and Setters

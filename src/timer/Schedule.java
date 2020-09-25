@@ -1,5 +1,8 @@
 package timer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Schedule {
@@ -38,6 +41,15 @@ public class Schedule {
 		return false;
 	}
 	
+	// Export to CSV file
+	public void writeToCSV() throws FileNotFoundException {
+		File csvFile = new File("schedule.csv");
+		try(PrintWriter writer = new PrintWriter(csvFile)){
+			for(Task task : tasks) {
+				writer.write(task + "\n");
+			}
+		}
+	}
 	
 	// Getter Methods
 	public String name() {
