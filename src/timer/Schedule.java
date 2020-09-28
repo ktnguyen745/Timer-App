@@ -46,7 +46,7 @@ public class Schedule {
 		File csvFile = new File("schedule.csv");
 		try(PrintWriter writer = new PrintWriter(csvFile)){
 			for(Task task : tasks) {
-				writer.write(task + "\n");
+				writer.write(task.toCSV() + "\n");
 			}
 		}
 	}

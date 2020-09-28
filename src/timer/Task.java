@@ -15,6 +15,11 @@ public class Task {
 	
 	// toString
 	public String toString() {
+		return name + " - " + duration.toString();
+	}
+	
+	// toCSV
+	public String toCSV() {
 		return name + "," + duration.toString();
 	}
 	
