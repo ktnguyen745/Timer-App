@@ -33,10 +33,15 @@ public class Schedule {
 	// Instance Variables
 	private ArrayList<Task> tasks;
 	private String name;
+<<<<<<< Upstream, based on origin/Feature_3
 	private Time total;
 	private GridPane displayPane;
 	private VBox taskListBox;
 
+=======
+	private Duration total;
+	
+>>>>>>> a63606a Added a total duration to Schedule and a getSeconds method to Duration.
 	// Constructor
 	public Schedule(String name) {
 		this.name = name;
@@ -63,10 +68,15 @@ public class Schedule {
 
 	// AddTask
 	public void addTask(String name, int hours, int minutes, int seconds) {
+<<<<<<< Upstream, based on origin/Feature_3
 		Time time = new Time();
 		time.setTimer(hours, minutes, seconds);
 		Task task = new Task(name, time);
+=======
+		Task task = new Task(name, new Duration(hours, minutes, seconds));
+>>>>>>> a63606a Added a total duration to Schedule and a getSeconds method to Duration.
 		tasks.add(task);
+<<<<<<< Upstream, based on origin/Feature_3
 		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 		if (total != null) {
 			int totalHours = hours + total.getHours();
@@ -85,6 +95,45 @@ public class Schedule {
 		} else {
 			total = new Time();
 			total.setTimer(hours, minutes, seconds);
+=======
+		if (total != null) {
+			int totalHours = hours + total.getHours();
+			int totalMinutes = minutes + total.getMinutes();
+			if(totalMinutes >= 60) {
+				totalHours += (int) Math.floor(totalMinutes / 60);
+				totalMinutes = totalMinutes % 60; 
+			}
+			int totalSeconds = seconds + total.getSeconds();
+			if(totalSeconds >= 60) {
+				totalMinutes += (int) Math.floor(totalSeconds / 60);
+				totalSeconds = totalSeconds % 60;
+			}
+			total = new Duration(totalHours, totalMinutes, totalSeconds);
+		} else {
+			total = new Duration(hours, minutes, seconds);
+		}
+	}
+	
+	// RemoveTask
+	public void removeTask(int index) {
+		if(tasks.size() >= index) {
+			int totalHours = total.getHours() - tasks.get(index).duration().getHours();
+			int totalMinutes = total.getMinutes() - tasks.get(index).duration().getMinutes();
+			if(totalMinutes < 0) {
+				totalHours--;
+				totalMinutes += 60;
+			}
+			int totalSeconds = total.getSeconds() - tasks.get(index).duration().getSeconds();
+			if(totalSeconds < 0) {
+				totalMinutes--;
+				totalSeconds += 60;
+			}
+			total = new Duration(totalHours, totalMinutes, totalSeconds);
+			tasks.remove(index);	
+		} 
+		if(tasks.size() == 0) {
+			total = new Duration(0, 0, 0);
+>>>>>>> a63606a Added a total duration to Schedule and a getSeconds method to Duration.
 		}
 	}
 
@@ -142,6 +191,7 @@ public class Schedule {
 	public ArrayList<Task> tasks(){
 		return tasks;
 	}
+<<<<<<< Upstream, based on origin/Feature_3
 
 	// GUI Methods
 	// 300x, 250y
@@ -413,4 +463,10 @@ public class Schedule {
 		return removeTaskEvent;
 	}
 
+=======
+	
+	public Duration total() {
+		return total;
+	}
+>>>>>>> a63606a Added a total duration to Schedule and a getSeconds method to Duration.
 }
