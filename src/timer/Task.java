@@ -17,8 +17,14 @@ public class Task {
 		duration.start();
 	}
 	
+	// toString
 	public String toString() {
-		return name;
+		return name + " - " + duration.toString();
+	}
+	
+	// toCSV
+	public String toCSV() {
+		return name + "," + duration.toString();
 	}
 	
 	// Getters and Setters
