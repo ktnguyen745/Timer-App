@@ -192,18 +192,18 @@ import javafx.util.Duration;
 
 public class Time extends Application {
 	// Change to final at some point
-	private static final int secondsDelay = 1000;
-	private static final int secondsPeriod = 1000;
+//	private static final int secondsDelay = 1000;
+//	private static final int secondsPeriod = 1000;
 
 	private Integer hours = 1;
-	private Integer minutes = 1;
+	private Integer minutes = 0;
 	private Integer seconds = 2;
 
 	private Label minutesLabel = new Label();
 	private Label hoursLabel = new Label();
 	private Label secondsLabel = new Label();
 
-	private Timer timer = new Timer();
+//	private Timer timer = new Timer();
 	private Timeline timeline = new Timeline();
 
 
@@ -230,37 +230,37 @@ public class Time extends Application {
 //			}
 //		}, secondsDelay, secondsPeriod);
 //	}
-
-	public int getHours() {
-		return hours;
-	}
-
-	public int getMinutes() {
-		return minutes;
-	}
-
-	private final int setInterval() {
-		if (hours == 0 && minutes == 0 && seconds == 1) {
-			timer.cancel();
-		}
-
-		switch (seconds) {
-		case 1:
-			if (hours != 0 && minutes == 0) {
-				--hours;
-				minutes = 59;
-			} else {
-				--minutes;
-			}
-
-			break;
-		case 0:
-			seconds = 60;
-			break;
-		}
-
-		return --seconds;
-	}
+//	
+//	private final int setInterval() {
+//	if (hours == 0 && minutes == 0 && seconds == 1) {
+//		timer.cancel();
+//	}
+//
+//	switch (seconds) {
+//	case 1:
+//		if (hours != 0 && minutes == 0) {
+//			--hours;
+//			minutes = 59;
+//		} else {
+//			--minutes;
+//		}
+//
+//		break;
+//	case 0:
+//		seconds = 60;
+//		break;
+//	}
+//
+//	return --seconds;
+//}
+//
+//	public int getHours() {
+//		return hours;
+//	}
+//
+//	public int getMinutes() {
+//		return minutes;
+//	}
 
 	public static void main(String[] args) {
 		Application.launch(args);
@@ -302,21 +302,27 @@ public class Time extends Application {
 				timeline.setCycleCount(Timeline.INDEFINITE);
 				timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 					// KeyFrame event handler
-					public void handle(ActionEvent event) {		
-						seconds--;
+					public void handle(ActionEvent event) {								
+						if (hours == 0 && minutes == 0 && seconds == 0) {
+							timeline.stop();
+						}
 
 						// update timerLabel
+						hoursLabel.setText(hours.toString() + " :");
 						minutesLabel.setText(minutes.toString() + " :");
 						secondsLabel.setText(seconds.toString());
+
+						if(hours != 0 && minutes == 0 && seconds == 0) {
+							hours--;
+							minutes = 60;
+						}
 						
 						if(seconds == 0) {
 							seconds = 60;
 							minutes--;
 						}
 						
-						if (minutes == 0 && seconds == 0) {
-							timeline.stop();
-						}
+						seconds--;
 					}
 				}));
 				timeline.playFromStart();
@@ -336,7 +342,7 @@ public class Time extends Application {
 		// Move the VBox down a bit
 		hbox.setLayoutY(30);
 		// Add the button and timerLabel to the VBox
-		hbox.getChildren().addAll(minutesLabel, secondsLabel, button);
+		hbox.getChildren().addAll(hoursLabel, minutesLabel, secondsLabel, button);
 		// Add the VBox to the root component
 		root.getChildren().add(hbox);
 	}
