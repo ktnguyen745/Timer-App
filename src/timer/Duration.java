@@ -38,6 +38,10 @@ public class Duration {
 		return minutes;
 	}
 	
+	public int getSeconds() {
+		return seconds;
+	}
+	
 	private final int setInterval() {
 		if (hours == 0 && minutes == 0 && seconds == 1) {
 			timer.cancel();

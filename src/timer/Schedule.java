@@ -7,6 +7,7 @@ public class Schedule {
 	// Instance Variables
 	private ArrayList<Task> tasks;
 	private String name;
+	private Duration total;
 	
 	// Constructor
 	public Schedule(String name) {
@@ -15,15 +16,46 @@ public class Schedule {
 	}
 	
 	// AddTask
-	public void addTask(String name, Duration duration) {
-		Task task = new Task(name, duration);
+	public void addTask(String name, int hours, int minutes, int seconds) {
+		Task task = new Task(name, new Duration(hours, minutes, seconds));
 		tasks.add(task);
+		if (total != null) {
+			int totalHours = hours + total.getHours();
+			int totalMinutes = minutes + total.getMinutes();
+			if(totalMinutes >= 60) {
+				totalHours += (int) Math.floor(totalMinutes / 60);
+				totalMinutes = totalMinutes % 60; 
+			}
+			int totalSeconds = seconds + total.getSeconds();
+			if(totalSeconds >= 60) {
+				totalMinutes += (int) Math.floor(totalSeconds / 60);
+				totalSeconds = totalSeconds % 60;
+			}
+			total = new Duration(totalHours, totalMinutes, totalSeconds);
+		} else {
+			total = new Duration(hours, minutes, seconds);
+		}
 	}
 	
 	// RemoveTask
-	public void removeTask() {
-		if(tasks.size() > 0) {
-			tasks.remove(0);	
+	public void removeTask(int index) {
+		if(tasks.size() >= index) {
+			int totalHours = total.getHours() - tasks.get(index).duration().getHours();
+			int totalMinutes = total.getMinutes() - tasks.get(index).duration().getMinutes();
+			if(totalMinutes < 0) {
+				totalHours--;
+				totalMinutes += 60;
+			}
+			int totalSeconds = total.getSeconds() - tasks.get(index).duration().getSeconds();
+			if(totalSeconds < 0) {
+				totalMinutes--;
+				totalSeconds += 60;
+			}
+			total = new Duration(totalHours, totalMinutes, totalSeconds);
+			tasks.remove(index);	
+		} 
+		if(tasks.size() == 0) {
+			total = new Duration(0, 0, 0);
 		}
 	}
 	
@@ -46,5 +78,9 @@ public class Schedule {
 	
 	public ArrayList<Task> tasks(){
 		return tasks;
+	}
+	
+	public Duration total() {
+		return total;
 	}
 }
