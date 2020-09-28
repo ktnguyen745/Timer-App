@@ -95,6 +95,14 @@ public class Time extends Application {
 //		return minutes;
 //	}
 
+	private String format(Integer time) {
+		if (time < 10) {
+			return "0" + time.toString();
+		}
+		
+		return time.toString();
+	}
+	
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
@@ -102,19 +110,19 @@ public class Time extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		Group root = new Group();
-		Scene scene = new Scene(root, 300, 250);
+		Scene scene = new Scene(root, 500, 450);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		hoursLabel.setText(hours.toString() + " :");
+		hoursLabel.setText(format(hours) + " :");
 		hoursLabel.setTextFill(Color.WHITE);
 		hoursLabel.setStyle("-fx-font-size: 4em;");
 		
-		minutesLabel.setText(minutes.toString() + " :");
+		minutesLabel.setText(format(minutes) + " :");
 		minutesLabel.setTextFill(Color.WHITE);
 		minutesLabel.setStyle("-fx-font-size: 4em;");
 		
-		secondsLabel.setText(seconds.toString());
+		secondsLabel.setText(format(seconds));
 		secondsLabel.setTextFill(Color.WHITE);
 		secondsLabel.setStyle("-fx-font-size: 4em;");
 
@@ -139,11 +147,11 @@ public class Time extends Application {
 						if (hours == 0 && minutes == 0 && seconds == 0) {
 							timeline.stop();
 						}
-
+						
 						// update timerLabel
-						hoursLabel.setText(hours.toString() + " :");
-						minutesLabel.setText(minutes.toString() + " :");
-						secondsLabel.setText(seconds.toString());
+						hoursLabel.setText(format(hours)+ " :");
+						minutesLabel.setText(format(minutes) + " :");
+						secondsLabel.setText(format(seconds));
 
 						if(hours != 0 && minutes == 0 && seconds == 0) {
 							hours--;
@@ -173,7 +181,7 @@ public class Time extends Application {
 		// Make it as wide as the application frame (scene)
 		hbox.setPrefWidth(scene.getWidth());
 		// Move the VBox down a bit
-		hbox.setLayoutY(30);
+		hbox.setLayoutY(70);
 		// Add the button and timerLabel to the VBox
 		hbox.getChildren().addAll(hoursLabel, minutesLabel, secondsLabel, button);
 		// Add the VBox to the root component
