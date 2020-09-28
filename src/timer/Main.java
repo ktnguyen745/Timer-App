@@ -1,5 +1,6 @@
 package timer;
 
+<<<<<<< Upstream, based on origin/Feature_3
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -8,6 +9,13 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	public static void main(String[] args) {	
 		Application.launch(args);
+=======
+public class Main {
+	public static void main(String[] args) {
+		Duration duration = new Duration(0, 2, 0);
+					
+		duration.start();
+>>>>>>> 7814ac0 Create classes for GUI
 	}
 
 	@Override
