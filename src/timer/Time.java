@@ -28,7 +28,7 @@ public class Time extends Application {
 	private static final int secondsDelay = 1000;
 	private static final int secondsPeriod = 1000;
 
-	private Integer hours;
+	private Integer hours = 1;
 	private Integer minutes = 1;
 	private Integer seconds = 2;
 
@@ -106,7 +106,7 @@ public class Time extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		hoursLabel.setText(minutes.toString() + " :");
+		hoursLabel.setText(hours.toString() + " :");
 		hoursLabel.setTextFill(Color.WHITE);
 		hoursLabel.setStyle("-fx-font-size: 4em;");
 		
@@ -114,7 +114,6 @@ public class Time extends Application {
 		minutesLabel.setTextFill(Color.WHITE);
 		minutesLabel.setStyle("-fx-font-size: 4em;");
 		
-		// Set up seconds label
 		secondsLabel.setText(seconds.toString());
 		secondsLabel.setTextFill(Color.WHITE);
 		secondsLabel.setStyle("-fx-font-size: 4em;");
