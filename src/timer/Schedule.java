@@ -15,6 +15,23 @@ public class Schedule {
 		tasks = new ArrayList<Task>();
 	}
 	
+	// runSchedule
+	public void runSchedule() {
+//		total.start();
+		for(Task task : tasks) {
+			task.run();
+			try {
+				Thread.sleep((task.duration().getHours() * 3600000) + 
+						(task.duration().getMinutes() * 60000) +
+						(task.duration().getSeconds() * 1000));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Task Complete");
+		}
+		System.out.println("Schedule Complete");
+	}
+	
 	// AddTask
 	public void addTask(String name, int hours, int minutes, int seconds) {
 		Task task = new Task(name, new Duration(hours, minutes, seconds));

@@ -13,6 +13,10 @@ public class Task {
 		this.duration = duration;
 	}
 	
+	public void run() {
+		duration.start();
+	}
+	
 	public String toString() {
 		return name;
 	}

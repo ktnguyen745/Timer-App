@@ -11,6 +11,7 @@ public class Duration {
 	private int hours;
 	private int minutes;
 	private int seconds;
+	private boolean isComplete = false;
 	
 	private Timer timer = new Timer();
 
@@ -44,6 +45,7 @@ public class Duration {
 	
 	private final int setInterval() {
 		if (hours == 0 && minutes == 0 && seconds == 1) {
+			isComplete = true;
 			timer.cancel();
 		}
 
@@ -64,5 +66,9 @@ public class Duration {
 		}
 				
 		return --seconds;
+	}
+	
+	public boolean isComplete() {
+		return isComplete();
 	}
 }
