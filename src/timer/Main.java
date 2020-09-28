@@ -7,10 +7,10 @@ public class Main {
 		
 		Schedule schedule = new Schedule("Test Schedule");
 		
-		schedule.addTask("Task A", null);
-		schedule.addTask("Task B", null);
-		schedule.addTask("Task C", null);
-		schedule.addTask("Task D", null);
+		schedule.addTask("Task A", new Duration(1, 10, 30));
+		schedule.addTask("Task B", new Duration(0, 20, 0));
+		schedule.addTask("Task C", new Duration(0, 45, 15));
+		schedule.addTask("Task D", new Duration(2, 0, 22));
 		
 		System.out.println(schedule.name() + " is currently: " +  schedule.tasks());
 		
