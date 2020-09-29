@@ -19,7 +19,7 @@ public class Main extends Application {
 		Schedule schedule = new Schedule("Test Schedule");
 
 		root.add(time.getTimer(), 0, 0);
-		root.add(schedule.buildScheduleGUI(), 1, 0);
+		root.add(schedule.buildScheduleGUI(), 0, 1);
 
 		Scene scene = new Scene(root, 500, 450);
 		stage.setScene(scene);

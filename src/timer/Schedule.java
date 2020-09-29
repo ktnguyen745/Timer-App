@@ -1,8 +1,5 @@
 package timer;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -23,10 +20,12 @@ import javafx.stage.Stage;
 
 public class Schedule {
 
+	ArrayList<Integer> swap = new ArrayList<Integer>();
+	VBox taskListBox;
+
 	// Instance Variables
 	private ArrayList<Task> tasks;
 	private String name;
-	private Time total;
 
 	// Constructor
 	public Schedule(String name) {
@@ -34,71 +33,16 @@ public class Schedule {
 		tasks = new ArrayList<Task>();
 	}
 
-	// runSchedule
-	public void runSchedule() {
-		//				total.start();
-		for(Task task : tasks) {
-			task.run();
-			try {
-				Thread.sleep((task.time().getHours() * 3600000) + 
-						(task.time().getMinutes() * 60000) +
-						(task.time().getSeconds() * 1000));
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Task Complete");
-		}
-		System.out.println("Schedule Complete");
-	}
-
 	// AddTask
-	public void addTask(String name, int hours, int minutes, int seconds) {
-		Time time = new Time();
-		time.setTimer(hours, minutes, seconds);
+	public void addTask(String name, Time time) {
 		Task task = new Task(name, time);
 		tasks.add(task);
-		if (total != null) {
-			int totalHours = hours + total.getHours();
-			int totalMinutes = minutes + total.getMinutes();
-			if(totalMinutes >= 60) {
-				totalHours += (int) Math.floor(totalMinutes / 60);
-				totalMinutes = totalMinutes % 60; 
-			}
-			int totalSeconds = seconds + total.getSeconds();
-			if(totalSeconds >= 60) {
-				totalMinutes += (int) Math.floor(totalSeconds / 60);
-				totalSeconds = totalSeconds % 60;
-			}
-			total = new Time();
-			total.setTimer(totalHours, totalMinutes, totalSeconds);
-		} else {
-			total = new Time();
-			total.setTimer(hours, minutes, seconds);
-		}
 	}
 
-
 	// RemoveTask
-	public void removeTask(int index) {
-		if(tasks.size() >= index) {
-			int totalHours = total.getHours() - tasks.get(index).time().getHours();
-			int totalMinutes = total.getMinutes() - tasks.get(index).time().getMinutes();
-			if(totalMinutes < 0) {
-				totalHours--;
-				totalMinutes += 60;
-			}
-			int totalSeconds = total.getSeconds() - tasks.get(index).time().getSeconds();
-			if(totalSeconds < 0) {
-				totalMinutes--;
-				totalSeconds += 60;
-			}
-			total = new Time();
-			total.setTimer(totalHours, totalMinutes, totalSeconds);
-			tasks.remove(index);	
-		} 
-		if(tasks.size() == 0) {
-			total = new Time();
-			total.setTimer(0, 0, 0);
+	public void removeTask() {
+		if(tasks.size() > 0) {
+			tasks.remove(0);	
 		}
 	}
 
@@ -111,16 +55,6 @@ public class Schedule {
 			return true; 
 		}
 		return false;
-	}
-	
-	// Export to CSV file
-	public void writeToCSV() throws FileNotFoundException {
-		File csvFile = new File("schedule.csv");
-		try(PrintWriter writer = new PrintWriter(csvFile)){
-			for(Task task : tasks) {
-				writer.write(task.toCSV() + "\n");
-			}
-		}
 	}
 
 
@@ -174,7 +108,7 @@ public class Schedule {
 		taskPane.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
 		taskPane.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
 
-		VBox taskListBox = new VBox();
+		taskListBox = new VBox();
 		taskPane.setContent(taskListBox);
 
 		box.getChildren().add(taskPane);
@@ -182,27 +116,10 @@ public class Schedule {
 		// This event will allow a button press to call the "export to csv" method
 		EventHandler<ActionEvent> exportCSVEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//				exportToCSV();
+				exportToCSV();
 			}
 		};
 		csvButton.setOnAction(exportCSVEvent);
-
-		// This event will wait for a user to click another reorder button and then swap those
-		// two events in the schedule. 
-		EventHandler<ActionEvent> reorderTasksEvent = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-
-			}
-		};
-
-		// This event will take the index of the task at the button clicked and remove that
-		// task from the schedule.
-		EventHandler<ActionEvent> removeTaskEvent = new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent e) {
-				String index = ((Button) e.getSource()).getId();
-				//removeTask(Integer.parseInt(index));
-			}
-		};
 
 		// This event will create a popup that takes a name, hour, minutes and seconds,
 		// create a new task with those values and add it to the schedule.
@@ -211,43 +128,9 @@ public class Schedule {
 				String name = "Test Task";
 				int hours = 0;
 				int minutes = 2;
-				int seconds = 14;
+				int seconds = 14;	
 
-				Time time = new Time();
-				time.setTimer(hours, minutes, seconds);
-				addTask(name, time);
-
-				HBox taskBox = new HBox();
-				taskBox.setId(String.valueOf(tasks.size() - 1));
-
-				Button moveButton = new Button("=");
-				moveButton.setPrefSize(30, 20);
-				moveButton.setOnAction(reorderTasksEvent);
-
-				Label taskName = new Label(name);
-				taskName.setStyle("-fx-font-size: 1.2em;");
-				taskName.setPrefWidth(120);
-
-				Label taskTime = new Label("HH:MM:SS");
-				taskTime.setStyle("-fx-font-size: 1.2em;");
-				taskTime.setPrefWidth(120);
-
-				Button subButton = new Button("-");
-				subButton.setPrefSize(30, 20);
-				subButton.setOnAction(removeTaskEvent);
-
-				HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
-				HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
-				HBox.setMargin(taskTime, new Insets(5, 5, 5, 5));
-				HBox.setMargin(subButton, new Insets(5, 5, 5, 5));
-
-				taskBox.getChildren().add(moveButton);
-				taskBox.getChildren().add(taskName);
-				taskBox.getChildren().add(taskTime);
-				taskBox.getChildren().add(subButton);
-
-				taskListBox.getChildren().add(taskBox);
-				System.out.println(tasks);
+				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
@@ -260,7 +143,82 @@ public class Schedule {
 			}
 		};
 		deleteButton.setOnAction(clearScheduleEvent);
-		
+
 		return box;
 	}
+
+	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
+		Time time = new Time();
+		time.setTimer(hours, minutes, seconds);
+		addTask(name, time);
+
+		HBox taskBox = new HBox();
+		taskBox.setId(String.valueOf(tasks.size() - 1));
+
+		Button moveButton = new Button("=");
+		moveButton.setPrefSize(30, 20);
+		moveButton.setOnAction(getReorderTasksEvent());
+		moveButton.setId(String.valueOf(tasks.size() - 1));
+
+		Label taskName = new Label(name);
+		taskName.setStyle("-fx-font-size: 1.2em;");
+		taskName.setPrefWidth(120);
+
+		Label taskTime = new Label("HH:MM:SS");
+		taskTime.setStyle("-fx-font-size: 1.2em;");
+		taskTime.setPrefWidth(120);
+
+		Button subButton = new Button("-");
+		subButton.setPrefSize(30, 20);
+		subButton.setOnAction(getRemoveTaskEvent());
+		subButton.setId(String.valueOf(tasks.size() - 1));
+
+		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
+		HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
+		HBox.setMargin(taskTime, new Insets(5, 5, 5, 5));
+		HBox.setMargin(subButton, new Insets(5, 5, 5, 5));
+
+		taskBox.getChildren().add(moveButton);
+		taskBox.getChildren().add(taskName);
+		taskBox.getChildren().add(taskTime);
+		taskBox.getChildren().add(subButton);
+		
+		return taskBox;
+	}
+
+	private EventHandler<ActionEvent> getReorderTasksEvent(){
+		// This event will wait for a user to click another reorder button and then swap those
+		// two events in the schedule. 
+		EventHandler<ActionEvent> reorderTasksEvent = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+//				String index = ((Button) e.getSource()).getId();
+//				swap.add(Integer.parseInt(index));
+//				if(swap.size() == 2) {
+//					reorderTasks(swap.get(0), swap.get(1));
+//					swap.clear();
+//					
+//					taskListBox.getChildren().clear();
+//					
+//					for(Task task : tasks) {
+//						addTaskToGUI(task.name(), task.time().getHours(), task.time().getMinutes(),
+//								task.time().getSeconds());
+//					}
+//				}
+			}
+		};
+		return reorderTasksEvent;
+	}
+
+	private EventHandler<ActionEvent> getRemoveTaskEvent(){
+		// This event will take the index of the task at the button clicked and remove that
+		// task from the schedule.
+		EventHandler<ActionEvent> removeTaskEvent = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				String index = ((Button) e.getSource()).getId();
+				removeTask(Integer.parseInt(index));
+			}
+		};
+		return removeTaskEvent;
+	}
+
 }

@@ -13,6 +13,21 @@ public class Task {
 		this.time = time;
 	}
 	
+	// toString
+	public String toString() {
+		return name + " - " + time.toString();
+	}
+	
+	// toCSV
+	public String toCSV() {
+		return name + "," + time.toString();
+	}
+
+	// run
+	public void run() {
+//		time.start();
+	}
+	
 	// Getters and Setters
 	public Time time() {
 		return time;
