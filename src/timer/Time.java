@@ -212,7 +212,7 @@ public class Time extends Application {
 		HBox buttonsArea = new HBox(20);
 
 		buttonsArea.setBackground(
-				new Background(new BackgroundFill(Color.LIGHTPINK, CornerRadii.EMPTY, new Insets(10, 10, 10, 10))));
+				new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, new Insets(10, 10, 10, 10))));
 
 		buttonsArea.setAlignment(Pos.CENTER);
 		buttonsArea.getChildren().addAll(button);
