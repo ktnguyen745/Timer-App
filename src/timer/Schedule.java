@@ -1,5 +1,8 @@
 package timer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -23,6 +26,7 @@ public class Schedule {
 	// Instance Variables
 	private ArrayList<Task> tasks;
 	private String name;
+	private Time total;
 
 	// Constructor
 	public Schedule(String name) {
@@ -30,16 +34,71 @@ public class Schedule {
 		tasks = new ArrayList<Task>();
 	}
 
-	// AddTask
-	public void addTask(String name, Time time) {
-		Task task = new Task(name, time);
-		tasks.add(task);
+	// runSchedule
+	public void runSchedule() {
+		//				total.start();
+		for(Task task : tasks) {
+			task.run();
+			try {
+				Thread.sleep((task.time().getHours() * 3600000) + 
+						(task.time().getMinutes() * 60000) +
+						(task.time().getSeconds() * 1000));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Task Complete");
+		}
+		System.out.println("Schedule Complete");
 	}
 
+	// AddTask
+	public void addTask(String name, int hours, int minutes, int seconds) {
+		Time time = new Time();
+		time.setTimer(hours, minutes, seconds);
+		Task task = new Task(name, time);
+		tasks.add(task);
+		if (total != null) {
+			int totalHours = hours + total.getHours();
+			int totalMinutes = minutes + total.getMinutes();
+			if(totalMinutes >= 60) {
+				totalHours += (int) Math.floor(totalMinutes / 60);
+				totalMinutes = totalMinutes % 60; 
+			}
+			int totalSeconds = seconds + total.getSeconds();
+			if(totalSeconds >= 60) {
+				totalMinutes += (int) Math.floor(totalSeconds / 60);
+				totalSeconds = totalSeconds % 60;
+			}
+			total = new Time();
+			total.setTimer(totalHours, totalMinutes, totalSeconds);
+		} else {
+			total = new Time();
+			total.setTimer(hours, minutes, seconds);
+		}
+	}
+
+
 	// RemoveTask
-	public void removeTask() {
-		if(tasks.size() > 0) {
-			tasks.remove(0);	
+	public void removeTask(int index) {
+		if(tasks.size() >= index) {
+			int totalHours = total.getHours() - tasks.get(index).time().getHours();
+			int totalMinutes = total.getMinutes() - tasks.get(index).time().getMinutes();
+			if(totalMinutes < 0) {
+				totalHours--;
+				totalMinutes += 60;
+			}
+			int totalSeconds = total.getSeconds() - tasks.get(index).time().getSeconds();
+			if(totalSeconds < 0) {
+				totalMinutes--;
+				totalSeconds += 60;
+			}
+			total = new Time();
+			total.setTimer(totalHours, totalMinutes, totalSeconds);
+			tasks.remove(index);	
+		} 
+		if(tasks.size() == 0) {
+			total = new Time();
+			total.setTimer(0, 0, 0);
 		}
 	}
 
@@ -52,6 +111,16 @@ public class Schedule {
 			return true; 
 		}
 		return false;
+	}
+	
+	// Export to CSV file
+	public void writeToCSV() throws FileNotFoundException {
+		File csvFile = new File("schedule.csv");
+		try(PrintWriter writer = new PrintWriter(csvFile)){
+			for(Task task : tasks) {
+				writer.write(task.toCSV() + "\n");
+			}
+		}
 	}
 
 
@@ -66,13 +135,10 @@ public class Schedule {
 
 	// GUI Methods
 	// 300x, 250y
-	public VBox buildScheduleGUI(Stage stage) {
+	public VBox buildScheduleGUI() {
 		VBox box = new VBox();
 		box.setBackground(new Background (new BackgroundFill(
 				Color.LIGHTPINK, CornerRadii.EMPTY, Insets.EMPTY)));
-		Scene scene = new Scene(box, 360, 150);
-
-		stage.setScene(scene);
 
 		// Add top HBox
 		HBox topBar = new HBox();
@@ -110,13 +176,13 @@ public class Schedule {
 
 		VBox taskListBox = new VBox();
 		taskPane.setContent(taskListBox);
-		
+
 		box.getChildren().add(taskPane);
 
 		// This event will allow a button press to call the "export to csv" method
 		EventHandler<ActionEvent> exportCSVEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-//				exportToCSV();
+				//				exportToCSV();
 			}
 		};
 		csvButton.setOnAction(exportCSVEvent);
@@ -128,7 +194,7 @@ public class Schedule {
 
 			}
 		};
-		
+
 		// This event will take the index of the task at the button clicked and remove that
 		// task from the schedule.
 		EventHandler<ActionEvent> removeTaskEvent = new EventHandler<ActionEvent>() {
@@ -195,8 +261,6 @@ public class Schedule {
 		};
 		deleteButton.setOnAction(clearScheduleEvent);
 		
-		stage.show();
-
 		return box;
 	}
 }
