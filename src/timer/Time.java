@@ -106,18 +106,17 @@ public class Time extends Application {
 	}
 
 	public static void main(String[] args) {
-		Application.launch(args);
+//		Application.launch(args);
 	}
 
-	@Override
-	public void start(Stage primaryStage) {
+	public GridPane getTimer() {
 		GridPane root = new GridPane();
 		root.setPadding(new Insets(80, 10, 10, 10));
 		root.setVgap(7);
 
 		Scene scene = new Scene(root, 500, 450);
-		primaryStage.setScene(scene);
-		primaryStage.show();
+//		primaryStage.setScene(scene);
+//		primaryStage.show();
 
 		hoursLabel.setText(format(hours) + " :");
 		hoursLabel.setTextFill(Color.WHITE);
@@ -218,5 +217,7 @@ public class Time extends Application {
 		buttonsArea.getChildren().addAll(button);
 
 		root.add(buttonsArea, 0, 1);
+		
+		return root;
 	}
 }
