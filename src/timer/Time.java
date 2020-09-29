@@ -26,11 +26,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Time extends Application {
-	// Change to final at some point
-//	private static final int secondsDelay = 1000;
-//	private static final int secondsPeriod = 1000;
-
+public class Time {
 	private Integer hours = 1;
 	private Integer minutes = 0;
 	private Integer seconds = 2;
@@ -39,7 +35,6 @@ public class Time extends Application {
 	private Label hoursLabel = new Label();
 	private Label secondsLabel = new Label();
 
-//	private Timer timer = new Timer();
 	private Timeline timeline = new Timeline();
 
 	public void setTimer(Integer hours, Integer minutes, Integer seconds) {
@@ -47,55 +42,6 @@ public class Time extends Application {
 		this.minutes = minutes;
 		this.seconds = seconds + 1;
 	}
-
-//	Old constructor
-//	public Duration(int hours, int minutes, int seconds) {
-//		this.hours = hours;
-//		this.minutes = minutes;
-//		this.seconds = seconds + 1;
-//	}
-
-//	public void start() {
-//		timer.scheduleAtFixedRate(new TimerTask() {
-//
-//			public void run() {
-//				timerLabel.setText(seconds.toString());
-//				
-//				System.out.println(getHours() + " : " + getMinutes() + " : " + setInterval());
-//			}
-//		}, secondsDelay, secondsPeriod);
-//	}
-//	
-//	private final int setInterval() {
-//	if (hours == 0 && minutes == 0 && seconds == 1) {
-//		timer.cancel();
-//	}
-//
-//	switch (seconds) {
-//	case 1:
-//		if (hours != 0 && minutes == 0) {
-//			--hours;
-//			minutes = 59;
-//		} else {
-//			--minutes;
-//		}
-//
-//		break;
-//	case 0:
-//		seconds = 60;
-//		break;
-//	}
-//
-//	return --seconds;
-//}
-//
-//	public int getHours() {
-//		return hours;
-//	}
-//
-//	public int getMinutes() {
-//		return minutes;
-//	}
 
 	private String format(Integer time) {
 		if (time < 10) {
@@ -105,9 +51,6 @@ public class Time extends Application {
 		return time.toString();
 	}
 
-	public static void main(String[] args) {
-//		Application.launch(args);
-	}
 
 	public GridPane getTimer() {
 		GridPane root = new GridPane();
@@ -115,8 +58,6 @@ public class Time extends Application {
 		root.setVgap(7);
 
 		Scene scene = new Scene(root, 500, 450);
-//		primaryStage.setScene(scene);
-//		primaryStage.show();
 
 		hoursLabel.setText(format(hours) + " :");
 		hoursLabel.setTextFill(Color.WHITE);
