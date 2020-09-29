@@ -8,14 +8,21 @@ import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -146,16 +153,25 @@ public class Schedule {
 		Label scheduleLabel = new Label(name);
 		scheduleLabel.setTextFill(Color.WHITE);
 		scheduleLabel.setStyle("-fx-font-size: 2em; -fx-font-weight: bold;");
-		scheduleLabel.setPrefWidth(340);
+		scheduleLabel.setPrefWidth(200);
 
-		Button addButton = new Button("+");
-		addButton.setPrefSize(40, 40);
+		Button addButton = new Button("Add Task");
+		addButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		addButton.setTextFill(Color.WHITE);
+		addButton.setStyle("-fx-font-weight: bold");
+		addButton.setPrefSize(80, 40);
 
-		Button csvButton = new Button("&");
-		csvButton.setPrefSize(40, 40);
+		Button csvButton = new Button("Create .csv");
+		csvButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		csvButton.setTextFill(Color.WHITE);
+		csvButton.setStyle("-fx-font-weight: bold");
+		csvButton.setPrefSize(80, 40);
 
-		Button deleteButton = new Button("X");
-		deleteButton.setPrefSize(40, 40);
+		Button deleteButton = new Button("Clear Tasks");
+		deleteButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		deleteButton.setTextFill(Color.WHITE);
+		deleteButton.setStyle("-fx-font-weight: bold");
+		deleteButton.setPrefSize(80, 40);
 
 		HBox.setMargin(scheduleLabel, new Insets(5, 5, 5, 15));
 		HBox.setMargin(addButton, new Insets(5, 5, 5, 5));
@@ -185,7 +201,6 @@ public class Schedule {
 				try {
 					writeToCSV();
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -196,10 +211,58 @@ public class Schedule {
 		// create a new task with those values and add it to the schedule.
 		EventHandler<ActionEvent> addTaskEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				String name = "Test Task";
+				Alert popup = new Alert(AlertType.INFORMATION);
+				popup.setTitle("New Task");
+				popup.setHeaderText("New Task Creation Dialog");
+				
+				GridPane grid = new GridPane();
+				grid.setHgap(10);
+				grid.setVgap(10);
+				
+				TextField nameField = new TextField();
+				nameField.setPromptText("Enter task name...");
+				
+				TextField hoursField = new TextField();
+				hoursField.setPromptText("How many hours?");
+				
+				TextField minutesField = new TextField();
+				minutesField.setPromptText("How many minutes?");
+				
+				TextField secondsField = new TextField();
+				secondsField.setPromptText("How many seconds?");
+				
+				grid.add(new Label("Name:"), 0, 0);
+				grid.add(nameField, 1, 0);
+				grid.add(new Label("Hours:"), 0, 1);
+				grid.add(hoursField, 1, 1);
+				grid.add(new Label("Minutes:"), 0, 2);
+				grid.add(minutesField, 1, 2);
+				grid.add(new Label("Seconds:"), 0, 3);
+				grid.add(secondsField, 1, 3);
+				
+				popup.getDialogPane().setContent(grid);
+				popup.showAndWait();		
+				
+				String name = "Task";
+				if(nameField.getText() != "") {
+					name = nameField.getText();
+					
+				} 
+				
 				int hours = 0;
-				int minutes = 2;
-				int seconds = 14;	
+				if(hoursField.getText() != "") {
+					hours = Integer.parseInt(hoursField.getText());
+				} 
+				
+				int minutes = 0;
+				if(minutesField.getText() != "") {
+					minutes = Integer.parseInt(minutesField.getText());
+				} 
+				
+				int seconds = 0;
+				if(secondsField.getText() != "") {
+					seconds = Integer.parseInt(secondsField.getText());	
+				} 
 
 				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 			}
@@ -220,26 +283,33 @@ public class Schedule {
 
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
 		addTask(name, hours, minutes, seconds);
+		
+		Time time = new Time();
+		time.setTimer(hours, minutes, seconds);
 
 		HBox taskBox = new HBox();
 		taskBox.setId(String.valueOf(tasks.size() - 1));
 
-		Button moveButton = new Button("=");
-		moveButton.setPrefSize(30, 20);
+		Button moveButton = new Button("Swap");
+		moveButton.setPrefSize(60, 20);
 		moveButton.setOnAction(getReorderTasksEvent());
+		moveButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
 		moveButton.setId(String.valueOf(tasks.size() - 1));
 
 		Label taskName = new Label(name);
+		taskName.setAlignment(Pos.CENTER);
 		taskName.setStyle("-fx-font-size: 1.2em;");
-		taskName.setPrefWidth(190);
+		taskName.setPrefWidth(160);
 
-		Label taskTime = new Label("HH:MM:SS");
+		Label taskTime = new Label(time.toString());
+		taskTime.setAlignment(Pos.CENTER);
 		taskTime.setStyle("-fx-font-size: 1.2em;");
-		taskTime.setPrefWidth(190);
+		taskTime.setPrefWidth(160);
 
-		Button subButton = new Button("-");
-		subButton.setPrefSize(30, 20);
+		Button subButton = new Button("Remove");
+		subButton.setPrefSize(60, 20);
 		subButton.setOnAction(getRemoveTaskEvent());
+		subButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
 		subButton.setId(String.valueOf(tasks.size() - 1));
 
 		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
@@ -285,6 +355,7 @@ public class Schedule {
 			public void handle(ActionEvent e) {
 				String index = ((Button) e.getSource()).getId();
 				removeTask(Integer.parseInt(index));
+				taskListBox.getChildren().remove(Integer.parseInt(index));
 			}
 		};
 		return removeTaskEvent;

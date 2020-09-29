@@ -30,6 +30,7 @@ public class Time {
 	private Integer hours = 1;
 	private Integer minutes = 0;
 	private Integer seconds = 2;
+	private String display;
 
 	private Label minutesLabel = new Label();
 	private Label hoursLabel = new Label();
@@ -38,6 +39,7 @@ public class Time {
 	private Timeline timeline = new Timeline();
 
 	public void setTimer(Integer hours, Integer minutes, Integer seconds) {
+		display = format(hours) + ":" + format(minutes) + ":" + format(seconds);
 		this.hours = hours;
 		this.minutes = minutes;
 		this.seconds = seconds + 1;
@@ -171,5 +173,9 @@ public class Time {
 	
 	public int getSeconds() {
 		return seconds;
+	}
+	
+	public String toString() {
+		return display;
 	}
 }

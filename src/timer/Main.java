@@ -16,7 +16,7 @@ public class Main extends Application {
 		GridPane root = new GridPane();
 
 		Time time = new Time();
-		Schedule schedule = new Schedule("Test Schedule");
+		Schedule schedule = new Schedule("Schedule");
 
 		root.add(time.getTimer(), 0, 0);
 		root.add(schedule.buildScheduleGUI(), 0, 1);
