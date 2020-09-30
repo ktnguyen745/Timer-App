@@ -36,12 +36,14 @@ public class Schedule {
 	private Time total;
 	private GridPane displayPane;
 	private VBox taskListBox;
+	private ArrayList<Integer> swap;
 
 	// Constructor
 	public Schedule(String name) {
 		this.name = name;
 		tasks = new ArrayList<Task>();
 		displayPane = new GridPane();
+		swap = new ArrayList<Integer>();
 	}
 
 	// runSchedule
@@ -275,6 +277,7 @@ public class Schedule {
 					seconds = Integer.parseInt(secondsField.getText());	
 				} 
 
+				addTask(name, hours, minutes, seconds);
 				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 			}
 		};
@@ -295,19 +298,28 @@ public class Schedule {
 	}
 
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
-		addTask(name, hours, minutes, seconds);
 		
 		Time time = new Time();
 		time.setTimer(hours, minutes, seconds);
 
 		HBox taskBox = new HBox();
-		taskBox.setId(String.valueOf(tasks.size() - 1));
+		taskBox.setId(String.valueOf(taskListBox.getChildren().size()));
+		
+		DropShadow d = new DropShadow();
+		d.setColor(Color.PALEVIOLETRED);;
 
 		Button moveButton = new Button("Swap");
 		moveButton.setPrefSize(60, 20);
 		moveButton.setOnAction(getReorderTasksEvent());
 		moveButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
-		moveButton.setId(String.valueOf(tasks.size() - 1));
+		moveButton.setId(String.valueOf(taskBox.getId()));
+		
+		moveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				moveButton.setEffect(d);
+			}
+		});
 
 		Label taskName = new Label(name);
 		taskName.setAlignment(Pos.CENTER);
@@ -323,7 +335,7 @@ public class Schedule {
 		subButton.setPrefSize(60, 20);
 		subButton.setOnAction(getRemoveTaskEvent());
 		subButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
-		subButton.setId(String.valueOf(tasks.size() - 1));
+		subButton.setId(String.valueOf(taskBox.getId()));
 
 		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
@@ -343,19 +355,19 @@ public class Schedule {
 		// two events in the schedule. 
 		EventHandler<ActionEvent> reorderTasksEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//				String index = ((Button) e.getSource()).getId();
-				//				swap.add(Integer.parseInt(index));
-				//				if(swap.size() == 2) {
-				//					reorderTasks(swap.get(0), swap.get(1));
-				//					swap.clear();
-				//					
-				//					taskListBox.getChildren().clear();
-				//					
-				//					for(Task task : tasks) {
-				//						addTaskToGUI(task.name(), task.time().getHours(), task.time().getMinutes(),
-				//								task.time().getSeconds());
-				//					}
-				//				}
+				String index = ((Button) e.getSource()).getId();
+				swap.add(Integer.parseInt(index));
+				if(swap.size() == 2) {
+					reorderTasks(swap.get(0), swap.get(1));
+					swap.clear();
+
+					taskListBox.getChildren().clear();
+
+					for(Task task : tasks) {
+						taskListBox.getChildren().add(addTaskToGUI(task.name(), task.time().getHours(), 
+								task.time().getMinutes(), task.time().getSeconds()));
+					}
+				}
 			}
 		};
 		return reorderTasksEvent;
@@ -369,6 +381,13 @@ public class Schedule {
 				String index = ((Button) e.getSource()).getId();
 				removeTask(Integer.parseInt(index));
 				taskListBox.getChildren().remove(Integer.parseInt(index));
+				
+				taskListBox.getChildren().clear();
+
+				for(Task task : tasks) {
+					taskListBox.getChildren().add(addTaskToGUI(task.name(), task.time().getHours(), 
+							task.time().getMinutes(), task.time().getSeconds()));
+				}
 			}
 		};
 		return removeTaskEvent;
