@@ -34,19 +34,21 @@ public class Schedule {
 	private ArrayList<Task> tasks;
 	private String name;
 	private Time total;
+	private GridPane displayPane;
 	private VBox taskListBox;
 
 	// Constructor
 	public Schedule(String name) {
 		this.name = name;
 		tasks = new ArrayList<Task>();
+		displayPane = new GridPane();
 	}
 
 	// runSchedule
 	public void runSchedule() {
-		//			total.start();
 		for(Task task : tasks) {
 			task.run();
+			displayPane.add(task.time().getTimer(), 0, 0);
 			try {
 				Thread.sleep((task.time().getHours() * 3600000) + 
 						(task.time().getMinutes() * 60000) +
@@ -142,7 +144,7 @@ public class Schedule {
 
 	// GUI Methods
 	// 300x, 250y
-	public VBox buildScheduleGUI() {
+	public GridPane buildScheduleGUI() {
 		VBox box = new VBox();
 		box.setBackground(new Background (new BackgroundFill(
 				Color.LIGHTPINK, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -200,8 +202,17 @@ public class Schedule {
 			public void handle(ActionEvent e) {
 				try {
 					writeToCSV();
+					Alert csvSuccess = new Alert(AlertType.INFORMATION);
+					csvSuccess.setTitle("Success");
+					csvSuccess.setHeaderText("A .csv file was created");
+					csvSuccess.setContentText("Look for 'schedule.csv' in the project directory!");
+					csvSuccess.showAndWait();
 				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
+					Alert csvFail = new Alert(AlertType.ERROR);
+					csvFail.setTitle("Error");
+					csvFail.setHeaderText("An error has occurred");
+					csvFail.setContentText("No .csv file could be created.");
+					csvFail.showAndWait();
 				}
 			}
 		};
@@ -277,8 +288,10 @@ public class Schedule {
 			}
 		};
 		deleteButton.setOnAction(clearScheduleEvent);
+		
+		displayPane.add(box, 0, 1);
 
-		return box;
+		return displayPane;
 	}
 
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
@@ -321,7 +334,7 @@ public class Schedule {
 		taskBox.getChildren().add(taskName);
 		taskBox.getChildren().add(taskTime);
 		taskBox.getChildren().add(subButton);
-
+		
 		return taskBox;
 	}
 
