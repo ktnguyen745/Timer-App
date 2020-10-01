@@ -254,25 +254,36 @@ public class Schedule {
 				popup.getDialogPane().setContent(grid);
 				popup.showAndWait();		
 				
-				String name = "Task";
-				if(nameField.getText() != "") {
+				String name = "Task " + (tasks.size() + 1);
+				if(nameField.getText() != null && !nameField.getText().isEmpty()) {
 					name = nameField.getText();
-					
 				} 
 				
 				int hours = 0;
-				if(hoursField.getText() != "") {
-					hours = Integer.parseInt(hoursField.getText());
+				if(hoursField.getText() != null && !hoursField.getText().isEmpty()) {
+					try {
+						hours = Integer.parseInt(hoursField.getText());
+					} catch (NumberFormatException exception) {
+						hours = 0;
+					}
 				} 
 				
 				int minutes = 0;
-				if(minutesField.getText() != "") {
-					minutes = Integer.parseInt(minutesField.getText());
+				if(minutesField.getText() != null && !minutesField.getText().isEmpty()) {
+					try {
+						minutes = Integer.parseInt(minutesField.getText());
+					} catch (NumberFormatException exception) {
+						minutes = 0;
+					}
 				} 
 				
 				int seconds = 0;
-				if(secondsField.getText() != "") {
-					seconds = Integer.parseInt(secondsField.getText());	
+				if(secondsField.getText() != null && !secondsField.getText().isEmpty()) {
+					try {
+						seconds = Integer.parseInt(secondsField.getText());
+					} catch (NumberFormatException exception) {
+						seconds = 0;
+					}
 				} 
 
 				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
