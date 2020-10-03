@@ -63,9 +63,9 @@ public class Schedule {
 					} else if(line[i] == "" && i != 0) {
 						line[i] = "0";
 					}
-					addTask(line[0], new Duration(Integer.parseInt(line[1]), 
-							Integer.parseInt(line[2]), Integer.parseInt(line[3])));
 				}
+				addTask(line[0], new Duration(Integer.parseInt(line[1]), 
+						Integer.parseInt(line[2]), Integer.parseInt(line[3])));
 			}
 			
 			
