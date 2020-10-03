@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Schedule {
 
@@ -97,6 +98,28 @@ public class Schedule {
 			for(Task task : tasks) {
 				writer.write(task.toCSV() + "\n");
 			}
+		}
+	}
+	
+	// Import from CSV file
+	public void importCSV() throws FileNotFoundException {
+		try(Scanner fileIn = new Scanner(new File("schedule.csv"))){
+			while(fileIn.hasNextLine()) {
+				String[] line = fileIn.nextLine().split(",");
+				for(int i = 0; i < line.length; i++) {
+					if(line[i] == "" && i == 0) {
+						line[i] = "Task " + (i + 1);
+					} else if(line[i] == "" && i != 0) {
+						line[i] = "0";
+					}
+					addTask(line[0], new Duration(Integer.parseInt(line[1]), 
+							Integer.parseInt(line[2]), Integer.parseInt(line[3])));
+				}
+			}
+			
+			
+		} catch (FileNotFoundException excpetion) {
+			
 		}
 	}
 	
