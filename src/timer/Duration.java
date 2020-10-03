@@ -20,7 +20,7 @@ public class Duration {
 		this.hours = hours;
 		this.minutes = minutes;
 		this.seconds = seconds + 1;
-		this.display = hours + ":" + minutes + ":" + seconds;
+		this.display = hours + "," + minutes + "," + seconds;
 	}
 	
 	public void start() {
