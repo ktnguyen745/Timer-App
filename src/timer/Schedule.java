@@ -67,6 +67,7 @@ public class Schedule {
 		time.setTimer(hours, minutes, seconds);
 		Task task = new Task(name, time);
 		tasks.add(task);
+		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 		if (total != null) {
 			int totalHours = hours + total.getHours();
 			int totalMinutes = minutes + total.getMinutes();
@@ -155,7 +156,7 @@ public class Schedule {
 		Label scheduleLabel = new Label(name);
 		scheduleLabel.setTextFill(Color.WHITE);
 		scheduleLabel.setStyle("-fx-font-size: 2em; -fx-font-weight: bold;");
-		scheduleLabel.setPrefWidth(200);
+		scheduleLabel.setPrefWidth(120);
 
 		Button addButton = new Button("Add Task");
 		addButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
@@ -168,6 +169,12 @@ public class Schedule {
 		csvButton.setTextFill(Color.WHITE);
 		csvButton.setStyle("-fx-font-weight: bold");
 		csvButton.setPrefSize(80, 40);
+		
+		Button importCsvButton = new Button("Import .csv");
+		importCsvButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		importCsvButton.setTextFill(Color.WHITE);
+		importCsvButton.setStyle("-fx-font-weight: bold");
+		importCsvButton.setPrefSize(80, 40);
 
 		Button deleteButton = new Button("Clear Tasks");
 		deleteButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
@@ -178,11 +185,13 @@ public class Schedule {
 		HBox.setMargin(scheduleLabel, new Insets(5, 5, 5, 15));
 		HBox.setMargin(addButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(csvButton, new Insets(5, 5, 5, 5));
+		HBox.setMargin(importCsvButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(deleteButton, new Insets(5, 5, 5, 5));
 
 		topBar.getChildren().add(scheduleLabel);
 		topBar.getChildren().add(addButton);
 		topBar.getChildren().add(csvButton);
+		topBar.getChildren().add(importCsvButton);
 		topBar.getChildren().add(deleteButton);
 
 		box.getChildren().add(topBar);
@@ -217,6 +226,26 @@ public class Schedule {
 			}
 		};
 		csvButton.setOnAction(exportCSVEvent);
+		
+		// This event will allow a button press to call the "importCSV" method
+		EventHandler<ActionEvent> importCSVEvent = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					writeToCSV(); //importCSV();
+					Alert csvSuccess = new Alert(AlertType.INFORMATION);
+					csvSuccess.setTitle("Success");
+					csvSuccess.setHeaderText("The schedule was updated.");
+					csvSuccess.showAndWait();
+				} catch (FileNotFoundException e1) {
+					Alert csvFail = new Alert(AlertType.ERROR);
+					csvFail.setTitle("Error");
+					csvFail.setHeaderText("An error has occurred");
+					csvFail.setContentText("No .csv file could be found.");
+					csvFail.showAndWait();
+				}
+			}
+		};
+		importCsvButton.setOnAction(importCSVEvent);
 
 		// This event will create a popup that takes a name, hour, minutes and seconds,
 		// create a new task with those values and add it to the schedule.
@@ -285,8 +314,8 @@ public class Schedule {
 						seconds = 0;
 					}
 				} 
-
-				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
+				
+				addTask(name, hours, minutes, seconds);
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
@@ -306,7 +335,6 @@ public class Schedule {
 	}
 
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
-		addTask(name, hours, minutes, seconds);
 		
 		Time time = new Time();
 		time.setTimer(hours, minutes, seconds);
