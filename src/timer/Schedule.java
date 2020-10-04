@@ -60,6 +60,7 @@ public class Schedule {
 		time.setTimer(hours, minutes, seconds);
 		Task task = new Task(name, time);
 		tasks.add(task);
+		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 		if (total != null) {
 			int totalHours = hours + total.getHours();
 			int totalMinutes = minutes + total.getMinutes();
@@ -151,6 +152,11 @@ public class Schedule {
 		csvButton.setTextFill(Color.WHITE);
 		csvButton.setStyle("-fx-font-weight: bold");
 		csvButton.setPrefSize(80, 40);
+		Button importCsvButton = new Button("Import .csv");
+		importCsvButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		importCsvButton.setTextFill(Color.WHITE);
+		importCsvButton.setStyle("-fx-font-weight: bold");
+		importCsvButton.setPrefSize(80, 40);
 		Button deleteButton = new Button("Clear Tasks");
 		deleteButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
 		deleteButton.setTextFill(Color.WHITE);
@@ -159,10 +165,12 @@ public class Schedule {
 		HBox.setMargin(scheduleLabel, new Insets(5, 5, 5, 15));
 		HBox.setMargin(addButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(csvButton, new Insets(5, 5, 5, 5));
+		HBox.setMargin(importCsvButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(deleteButton, new Insets(5, 5, 5, 5));
 		topBar.getChildren().add(scheduleLabel);
 		topBar.getChildren().add(addButton);
 		topBar.getChildren().add(csvButton);
+		topBar.getChildren().add(importCsvButton);
 		topBar.getChildren().add(deleteButton);
 		box.getChildren().add(topBar);
 		// Add ScrollPane
@@ -174,6 +182,17 @@ public class Schedule {
 		box.getChildren().add(taskPane);
 		// This event will allow a button press to call the "export to csv" method
 		EventHandler<ActionEvent> exportCSVEvent = new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				try {
+					writeToCSV();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+			}
+		};
+		csvButton.setOnAction(exportCSVEvent);
+		// This event will allow a button press to call the "import csv" method
+		EventHandler<ActionEvent> importCSVEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
 					writeToCSV();
@@ -227,7 +246,6 @@ public class Schedule {
 				if(secondsField.getText() != "") {
 					seconds = Integer.parseInt(secondsField.getText());	
 				} 
-				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
