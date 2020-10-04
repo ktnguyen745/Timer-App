@@ -69,6 +69,7 @@ public class Schedule {
 		time.setTimer(hours, minutes, seconds);
 		Task task = new Task(name, time);
 		tasks.add(task);
+		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 		if (total != null) {
 			int totalHours = hours + total.getHours();
 			int totalMinutes = minutes + total.getMinutes();
@@ -257,28 +258,40 @@ public class Schedule {
 				popup.showAndWait();		
 				
 				String name = "Task";
-				if(nameField.getText() != "") {
-					name = nameField.getText();
-					
-				} 
+				if(nameField.getText() != null && nameField.getText() != "") {
+					name = nameField.getText();		
+				} else {
+					name = "Task " + (tasks.size() + 1);
+				}
 				
 				int hours = 0;
-				if(hoursField.getText() != "") {
-					hours = Integer.parseInt(hoursField.getText());
+				if(hoursField.getText() != null && hoursField.getText() != "") {
+					try {
+						hours = Integer.parseInt(hoursField.getText());
+					} catch (NumberFormatException exception) {
+						hours = 0;
+					}
 				} 
 				
 				int minutes = 0;
-				if(minutesField.getText() != "") {
-					minutes = Integer.parseInt(minutesField.getText());
+				if(minutesField.getText() != null && minutesField.getText() != "") {
+					try {
+						minutes = Integer.parseInt(minutesField.getText());
+					} catch (NumberFormatException exception) {
+						minutes = 0;
+					}
 				} 
 				
 				int seconds = 0;
-				if(secondsField.getText() != "") {
-					seconds = Integer.parseInt(secondsField.getText());	
+				if(secondsField.getText() != null && secondsField.getText() != "") {
+					try {
+						seconds = Integer.parseInt(secondsField.getText());
+					} catch (NumberFormatException exception) {
+						seconds = 0;
+					}
 				} 
 
 				addTask(name, hours, minutes, seconds);
-				taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
