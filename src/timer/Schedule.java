@@ -141,7 +141,7 @@ public class Schedule {
 		Label scheduleLabel = new Label(name);
 		scheduleLabel.setTextFill(Color.WHITE);
 		scheduleLabel.setStyle("-fx-font-size: 2em; -fx-font-weight: bold;");
-		scheduleLabel.setPrefWidth(200);
+		scheduleLabel.setPrefWidth(120);
 		Button addButton = new Button("Add Task");
 		addButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
 		addButton.setTextFill(Color.WHITE);
