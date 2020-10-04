@@ -37,6 +37,7 @@ public class Schedule {
 	public Schedule(String name) {
 		this.name = name;
 		tasks = new ArrayList<Task>();
+		taskListBox = new VBox();
 	}
 	// runSchedule
 	public void runSchedule() {
@@ -177,7 +178,6 @@ public class Schedule {
 		ScrollPane taskPane = new ScrollPane();
 		taskPane.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
 		taskPane.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
-		taskListBox = new VBox();
 		taskPane.setContent(taskListBox);
 		box.getChildren().add(taskPane);
 		// This event will allow a button press to call the "export to csv" method
@@ -201,7 +201,7 @@ public class Schedule {
 				}
 			}
 		};
-		csvButton.setOnAction(exportCSVEvent);
+		importCsvButton.setOnAction(importCSVEvent);
 		// This event will create a popup that takes a name, hour, minutes and seconds,
 		// create a new task with those values and add it to the schedule.
 		EventHandler<ActionEvent> addTaskEvent = new EventHandler<ActionEvent>() {
@@ -246,6 +246,8 @@ public class Schedule {
 				if(secondsField.getText() != "") {
 					seconds = Integer.parseInt(secondsField.getText());	
 				} 
+				
+				addTask(name, hours, minutes, seconds);
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
@@ -260,7 +262,6 @@ public class Schedule {
 		return box;
 	}
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
-		addTask(name, hours, minutes, seconds);
 		Time time = new Time();
 		time.setTimer(hours, minutes, seconds);
 		HBox taskBox = new HBox();
@@ -268,7 +269,7 @@ public class Schedule {
 		Button moveButton = new Button("Swap");
 		moveButton.setPrefSize(60, 20);
 		moveButton.setOnAction(getReorderTasksEvent());
-		moveButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		moveButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
 		moveButton.setId(String.valueOf(tasks.size() - 1));
 		Label taskName = new Label(name);
 		taskName.setAlignment(Pos.CENTER);
@@ -281,7 +282,7 @@ public class Schedule {
 		Button subButton = new Button("Remove");
 		subButton.setPrefSize(60, 20);
 		subButton.setOnAction(getRemoveTaskEvent());
-		subButton.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		subButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
 		subButton.setId(String.valueOf(tasks.size() - 1));
 		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
