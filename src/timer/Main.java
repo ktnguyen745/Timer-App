@@ -19,7 +19,7 @@ public class Main extends Application {
 		root.setPadding(new Insets(100, 10, 10, 10));
 		root.setVgap(40);
 		
-		root.setStyle("-fx-background-image: url('background5.jpg'); " +
+		root.setStyle("-fx-background-image: url('background3.jpg'); " +
 		           "-fx-background-position: center center; " +
 		           "-fx-background-repeat: stretch;");
 
