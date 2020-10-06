@@ -23,6 +23,8 @@ public class Time {
 	private Integer hours = 1;
 	private Integer minutes = 0;
 	private Integer seconds = 2;
+	
+	private boolean go = false;
 
 	private Label minutesLabel = new Label();
 	private Label hoursLabel = new Label();
@@ -70,55 +72,42 @@ public class Time {
 		secondsLabel.setStyle("-fx-font-size: 4em;");
 
 		Button start = new Button("Start");
+		Button stop = new Button("Stop");
 		Button reset = new Button("Reset");
-
-		start.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
-		reset.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
-
-		start.setTextFill(Color.WHITE);
-		reset.setTextFill(Color.WHITE);
-
-		// + "-fx-background-radius: 2em; " Adds a more sleek style.
-		start.setStyle("-fx-font-size: 1em;");
-		reset.setStyle("-fx-font-size: 1em;");
-
+		
+		Button[] buttonArray = {start, stop, reset};
+		
 		DropShadow d = new DropShadow();
 		d.setColor(Color.PALEVIOLETRED);;
 		
-		start.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				start.setEffect(d);
-			}
-		});
-		
-		reset.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				reset.setEffect(d);
-			}
-		});
-		
-		start.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				start.setEffect(null);
-			}
-		});
-		
-		reset.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				reset.setEffect(null);
-			}
-		});
+		for(Button button : buttonArray) {
+			button.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+			button.setTextFill(Color.WHITE);
+			button.setStyle("-fx-font-size: 1em;");
+
+			button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent e) {
+					start.setEffect(d);
+				}
+			});
+			
+			button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent e) {
+					start.setEffect(null);
+				}
+			});
+		}
 
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				if (timeline != null) {
+				go = true;
+				
+				if (timeline != null && go == true) {
 					timeline.stop();
 				}
 
@@ -186,7 +175,7 @@ public class Time {
 				new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, new Insets(10, 10, 10, 10))));
 
 		buttonsArea.setAlignment(Pos.CENTER);
-		buttonsArea.getChildren().addAll(start, reset);
+		buttonsArea.getChildren().addAll(start, stop, reset);
 
 		root.add(buttonsArea, 0, 1);
 		
