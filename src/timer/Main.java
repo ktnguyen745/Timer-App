@@ -24,11 +24,11 @@ public class Main extends Application {
 		           "-fx-background-repeat: stretch;");
 
 		Scene scene = new Scene(root, 525, 450);
-		
-		Time time = new Time();
-		root.add(time.getTimer(), 0, 0);
-		
+				
 		Schedule schedule = new Schedule("Schedule");
+		Time time = new Time(schedule);
+		
+		root.add(time.getTimer(), 0, 0);
 		root.add(schedule.buildScheduleGUI(), 0, 1);
 			
 		stage.setScene(scene);
