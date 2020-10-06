@@ -64,31 +64,51 @@ public class Time {
 		secondsLabel.setTextFill(Color.WHITE);
 		secondsLabel.setStyle("-fx-font-size: 4em;");
 
-		Button button = new Button();
-		button.setText("Start");
-		button.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
-		button.setTextFill(Color.WHITE);
+		Button start = new Button("Start");
+		Button reset = new Button("Reset");
+
+		start.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+		reset.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+
+		start.setTextFill(Color.WHITE);
+		reset.setTextFill(Color.WHITE);
+
 		// + "-fx-background-radius: 2em; " Adds a more sleek style.
-		button.setStyle("-fx-font-size: 1em;");
+		start.setStyle("-fx-font-size: 1em;");
+		reset.setStyle("-fx-font-size: 1em;");
 
 		DropShadow d = new DropShadow();
 		d.setColor(Color.PALEVIOLETRED);;
 		
-		button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+		start.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				button.setEffect(d);
+				start.setEffect(d);
 			}
 		});
 		
-		button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+		reset.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				button.setEffect(null);
+				reset.setEffect(d);
+			}
+		});
+		
+		start.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				start.setEffect(null);
+			}
+		});
+		
+		reset.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				reset.setEffect(null);
 			}
 		});
 
-		button.setOnAction(new EventHandler<ActionEvent>() {
+		start.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -148,7 +168,7 @@ public class Time {
 				new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, new Insets(10, 10, 10, 10))));
 
 		buttonsArea.setAlignment(Pos.CENTER);
-		buttonsArea.getChildren().addAll(button);
+		buttonsArea.getChildren().addAll(start, reset);
 
 		root.add(buttonsArea, 0, 1);
 		
