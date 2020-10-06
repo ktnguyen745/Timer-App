@@ -33,7 +33,7 @@ public class Time {
 	public void setTimer(Integer hours, Integer minutes, Integer seconds) {
 		this.hours = hours;
 		this.minutes = minutes;
-		this.seconds = seconds + 1;
+		this.seconds = seconds;
 	}
 
 	private String format(Integer time) {
@@ -46,21 +46,26 @@ public class Time {
 
 
 	public GridPane getTimer() {
+		Integer initialHours = hours;
+		Integer initialMinutes = minutes;
+		Integer initialSeconds = seconds;
+
+		
 		GridPane root = new GridPane();
 		root.setPadding(new Insets(80, 10, 10, 10));
 		root.setVgap(7);
 
 		Scene scene = new Scene(root, 500, 450);
 
-		hoursLabel.setText(format(hours) + " :");
+		hoursLabel.setText(format(initialHours) + " :");
 		hoursLabel.setTextFill(Color.WHITE);
 		hoursLabel.setStyle("-fx-font-size: 4em;");
 
-		minutesLabel.setText(format(minutes) + " :");
+		minutesLabel.setText(format(initialMinutes) + " :");
 		minutesLabel.setTextFill(Color.WHITE);
 		minutesLabel.setStyle("-fx-font-size: 4em;");
 
-		secondsLabel.setText(format(seconds));
+		secondsLabel.setText(format(initialSeconds));
 		secondsLabel.setTextFill(Color.WHITE);
 		secondsLabel.setStyle("-fx-font-size: 4em;");
 
@@ -109,6 +114,7 @@ public class Time {
 		});
 
 		start.setOnAction(new EventHandler<ActionEvent>() {
+			
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -145,6 +151,18 @@ public class Time {
 				}));
 				timeline.playFromStart();
 			}
+		});
+		
+		reset.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				hours = initialHours;
+				minutes = initialMinutes;
+				seconds = initialSeconds;
+			}
+			
 		});
 
 		// Create and configure HBox
