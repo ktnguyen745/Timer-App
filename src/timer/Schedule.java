@@ -40,14 +40,14 @@ public class Schedule {
 		taskListBox = new VBox();
 	}
 	// runSchedule
-	public void runSchedule() {
+	public void runSchedule() {		
 		//			total.start();
 		for(Task task : tasks) {
 			task.run();
 			try {
 				Thread.sleep((task.time().getHours() * 3600000) + 
 						(task.time().getMinutes() * 60000) +
-						(task.time().getSeconds() * 1000));
+						(task.time().getSeconds() * 1000));				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -327,5 +327,9 @@ public class Schedule {
 			}
 		};
 		return removeTaskEvent;
+	}
+	
+	public Time getTotal() {
+		return total;
 	}
 }
