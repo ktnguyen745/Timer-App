@@ -25,52 +25,46 @@ public class Time {
 	private Integer seconds = 2;
 	
 	private boolean go = false;
-
+	
+	private String display;
 	private Label minutesLabel = new Label();
 	private Label hoursLabel = new Label();
 	private Label secondsLabel = new Label();
-
 	private Timeline timeline = new Timeline();
-
+	
 	public void setTimer(Integer hours, Integer minutes, Integer seconds) {
+		display = format(hours) + ":" + format(minutes) + ":" + format(seconds);
 		this.hours = hours;
 		this.minutes = minutes;
 		this.seconds = seconds;
 	}
-
 	private String format(Integer time) {
 		if (time < 10) {
 			return "0" + time.toString();
 		}
-
 		return time.toString();
 	}
-
-
 	public GridPane getTimer() {
 		Integer initialHours = hours;
 		Integer initialMinutes = minutes;
 		Integer initialSeconds = seconds;
-
+		
+		setTimer(hours, minutes, seconds);
 		
 		GridPane root = new GridPane();
-		root.setPadding(new Insets(80, 10, 10, 10));
 		root.setVgap(7);
-
 		Scene scene = new Scene(root, 500, 450);
-
-		hoursLabel.setText(format(initialHours) + " :");
+		hoursLabel.setText(format(hours) + " :");
 		hoursLabel.setTextFill(Color.WHITE);
 		hoursLabel.setStyle("-fx-font-size: 4em;");
-
-		minutesLabel.setText(format(initialMinutes) + " :");
+		minutesLabel.setText(format(minutes) + " :");
 		minutesLabel.setTextFill(Color.WHITE);
 		minutesLabel.setStyle("-fx-font-size: 4em;");
-
-		secondsLabel.setText(format(initialSeconds));
+		secondsLabel.setText(format(seconds));
 		secondsLabel.setTextFill(Color.WHITE);
 		secondsLabel.setStyle("-fx-font-size: 4em;");
-
+		
+		// Create buttons
 		Button start = new Button("Start");
 		Button stop = new Button("Stop");
 		Button reset = new Button("Reset");
@@ -99,43 +93,43 @@ public class Time {
 				}
 			});
 		}
-
+		
+		buttonArray[1].setOpacity(0.65);	
+		buttonArray[2].setOpacity(0.65);		
+		
 		start.setOnAction(new EventHandler<ActionEvent>() {
-			
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				start.setOpacity(0.65);
+				buttonArray[1].setOpacity(1);	
+				buttonArray[2].setOpacity(1);		
+
 				if (timeline != null) {
 					timeline.stop();
 				}
 				
 				go = true;
-
+				
 				timeline = new Timeline();
 				timeline.setCycleCount(Timeline.INDEFINITE);
 				timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 					// KeyFrame event handler
-					public void handle(ActionEvent event) {						
+					public void handle(ActionEvent event) {
 						if (hours == 0 && minutes == 0 && seconds == 0 || go == false) {
 							timeline.stop();
 						}
-
 						// update timerLabel
 						hoursLabel.setText(format(hours) + " :");
 						minutesLabel.setText(format(minutes) + " :");
 						secondsLabel.setText(format(seconds));
-
 						if (hours != 0 && minutes == 0 && seconds == 0) {
 							hours--;
 							minutes = 60;
 						}
-
 						if (seconds == 0) {
 							seconds = 60;
 							minutes--;
 						}
-
 						seconds--;
 					}
 				}));
@@ -144,30 +138,31 @@ public class Time {
 		});
 		
 		stop.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				start.setOpacity(1);
 				go = false;
 			}
 		});
 		
 		reset.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
-			public void handle(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+			public void handle(ActionEvent arg0) {				
 				hours = initialHours;
 				minutes = initialMinutes;
 				seconds = initialSeconds;
+				
+				hoursLabel.setText(format(hours) + " :");
+				minutesLabel.setText(format(minutes) + " :");
+				secondsLabel.setText(format(seconds));
 			}
 			
 		});
-
+		
 		// Create and configure HBox
 		// gap between components is 20
 		HBox timerArea = new HBox(20);
-		timerArea.setBackground(new Background(new BackgroundFill(Color.LIGHTPINK, CornerRadii.EMPTY, Insets.EMPTY)));
+		timerArea.setBackground(new Background(new BackgroundFill(Color.rgb(212, 117, 83), CornerRadii.EMPTY, Insets.EMPTY)));
 		// center the components within HBox
 		timerArea.setAlignment(Pos.CENTER);
 		// Make it as wide as the application frame (scene)
@@ -178,17 +173,13 @@ public class Time {
 		timerArea.getChildren().addAll(hoursLabel, minutesLabel, secondsLabel);
 		// Add the HBox to the root component
 		root.add(timerArea, 0, 0);
-
 		HBox buttonsArea = new HBox(20);
-
-		buttonsArea.setBackground(
-				new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, new Insets(10, 10, 10, 10))));
-
+		buttonsArea.setBackground(Background.EMPTY);
+		buttonsArea.setPadding(new Insets(5,10,10,10));
 		buttonsArea.setAlignment(Pos.CENTER);
 		buttonsArea.getChildren().addAll(start, stop, reset);
-
 		root.add(buttonsArea, 0, 1);
-		
+				
 		return root;
 	}
 	
@@ -211,7 +202,7 @@ public class Time {
 	public void setSeconds(Integer seconds) {
 		this.seconds = seconds;
 	}
-//	public String toString() {
-//		return display;
-//	}
+	public String toString() {
+		return display;
+	}
 }
