@@ -88,14 +88,14 @@ public class Time {
 			button.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent e) {
-					start.setEffect(d);
+					button.setEffect(d);
 				}
 			});
 			
 			button.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent e) {
-					start.setEffect(null);
+					button.setEffect(null);
 				}
 			});
 		}
@@ -105,18 +105,19 @@ public class Time {
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				go = true;
 				
-				if (timeline != null && go == true) {
+				if (timeline != null) {
 					timeline.stop();
 				}
+				
+				go = true;
 
 				timeline = new Timeline();
 				timeline.setCycleCount(Timeline.INDEFINITE);
 				timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 					// KeyFrame event handler
-					public void handle(ActionEvent event) {
-						if (hours == 0 && minutes == 0 && seconds == 0) {
+					public void handle(ActionEvent event) {						
+						if (hours == 0 && minutes == 0 && seconds == 0 || go == false) {
 							timeline.stop();
 						}
 
@@ -139,6 +140,15 @@ public class Time {
 					}
 				}));
 				timeline.playFromStart();
+			}
+		});
+		
+		stop.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				go = false;
 			}
 		});
 		
