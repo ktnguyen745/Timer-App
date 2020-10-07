@@ -26,9 +26,9 @@ public class Main extends Application {
 		Scene scene = new Scene(root, 525, 450);
 				
 		Schedule schedule = new Schedule("Schedule");
-		Time time = new Time(schedule);
+		TimerGUI timer = new TimerGUI(schedule);
 		
-		root.add(time.getTimer(), 0, 0);
+		root.add(timer.getTimer(), 0, 0);
 		root.add(schedule.buildScheduleGUI(), 0, 1);
 			
 		stage.setScene(scene);
