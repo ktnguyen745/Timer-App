@@ -30,23 +30,23 @@ public class TimerGUI {
 	private Timeline timeline = new Timeline();
 	private int count = 1;
 	private boolean go = false;
-	
+
 	public TimerGUI(Schedule schedule) {
 		this.schedule = schedule;
 	}
-    
+
 	private String format(Integer integer) {
 		if (integer < 10) {
 			return "0" + integer.toString();
 		}
 		return integer.toString();
 	}
-	
+
 	public void setTime(Time time) {
 		this.time = time;
 	}
-	
-	public GridPane getTimer() {	
+
+	public GridPane getTimer() {
 		GridPane root = new GridPane();
 		root.setVgap(7);
 		Scene scene = new Scene(root, 500, 450);
@@ -94,71 +94,77 @@ public class TimerGUI {
 
 		buttonArray[1].setOpacity(0.65);
 		buttonArray[2].setOpacity(0.65);
-					
+
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				start.setOpacity(0.65);
-				buttonArray[1].setOpacity(1);
-				buttonArray[2].setOpacity(1);
-
 				if (timeline != null) {
 					timeline.stop();
 				}
-				
-				go = true;
-				
-				if(count == 1) {
-					time.setHours(schedule.tasks().get(0).time().getHours());
-					time.setMinutes(schedule.tasks().get(0).time().getMinutes());
-					time.setSeconds(schedule.tasks().get(0).time().getSeconds());
-				}
-				
-				timeline = new Timeline();
-				timeline.setCycleCount(Timeline.INDEFINITE);
-				timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-					// KeyFrame event handler
-					public void handle(ActionEvent event) {
-						if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0 || go == false) {
-							if(schedule.tasks().size() == count || go == false) {
-								timeline.stop();
-							}
-							else {
-								time.setHours(schedule.tasks().get(count).time().getHours());
-								time.setMinutes(schedule.tasks().get(count).time().getMinutes());
-								time.setSeconds(schedule.tasks().get(count).time().getSeconds());
-								count++;
-							}
-						}
-						
-						// update timerLabel
-						hoursLabel.setText(format(time.getHours()) + " :");
-						minutesLabel.setText(format(time.getMinutes()) + " :");
-						secondsLabel.setText(format(time.getSeconds()));
-						
-						if (time.getHours() != 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
-							// hours--;
-							time.setHours(time.getHours() - 1);
-							// minutes = 60;
-							time.setMinutes(60);
-						}
-						if (time.getSeconds() == 0) {
-							// seconds = 60;
-							time.setSeconds(60);
-							// minutes--;
-							time.setMinutes(time.getMinutes() - 1);
-						}
-						// seconds--;
-						time.setSeconds(time.getSeconds() - 1);
+
+				if (schedule.tasks().size() > 0) {
+					start.setOpacity(0.65);
+					buttonArray[1].setOpacity(1);
+					buttonArray[2].setOpacity(1);
+
+					go = true;
+
+					if (count == 1) {
+						time.setHours(schedule.tasks().get(0).time().getHours());
+						time.setMinutes(schedule.tasks().get(0).time().getMinutes());
+						time.setSeconds(schedule.tasks().get(0).time().getSeconds());
 					}
-				}));
-				timeline.playFromStart();
+
+					timeline = new Timeline();
+					timeline.setCycleCount(Timeline.INDEFINITE);
+					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+						// KeyFrame event handler
+						public void handle(ActionEvent event) {
+							if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0
+									|| go == false) {
+								if (schedule.tasks().size() == count || go == false) {
+									start.setOpacity(1);
+									timeline.stop();
+								} else {
+									time.setHours(schedule.tasks().get(count).time().getHours());
+									time.setMinutes(schedule.tasks().get(count).time().getMinutes());
+									time.setSeconds(schedule.tasks().get(count).time().getSeconds());
+									count++;
+								}
+							}
+
+							// update timerLabel
+							hoursLabel.setText(format(time.getHours()) + " :");
+							minutesLabel.setText(format(time.getMinutes()) + " :");
+							secondsLabel.setText(format(time.getSeconds()));
+
+							if (time.getHours() != 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
+								// hours--;
+								time.setHours(time.getHours() - 1);
+								// minutes = 60;
+								time.setMinutes(60);
+							}
+							if (time.getSeconds() == 0) {
+								// seconds = 60;
+								time.setSeconds(60);
+								// minutes--;
+								time.setMinutes(time.getMinutes() - 1);
+							}
+							// seconds--;
+							time.setSeconds(time.getSeconds() - 1);
+						}
+					}));
+					
+					timeline.playFromStart();
+				}
 			}
+
 		});
 		stop.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				start.setOpacity(1);
+				stop.setOpacity(0.65);
 				go = false;
 			}
 		});
@@ -166,11 +172,14 @@ public class TimerGUI {
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				time.setHours(schedule.tasks().get(count-1).time().getHours());
-				time.setMinutes(schedule.tasks().get(count-1).time().getMinutes());
-				time.setSeconds(schedule.tasks().get(count-1).time().getSeconds());
+				time.setHours(schedule.tasks().get(count - 1).time().getHours());
+				time.setMinutes(schedule.tasks().get(count - 1).time().getMinutes());
+				time.setSeconds(schedule.tasks().get(count - 1).time().getSeconds());
+				
+				hoursLabel.setText(format(time.getHours()) + " :");
+				minutesLabel.setText(format(time.getMinutes()) + " :");
+				secondsLabel.setText(format(time.getSeconds()));
 			}
-
 		});
 
 		// Create and configure HBox
