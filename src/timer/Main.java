@@ -3,6 +3,7 @@ package timer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -30,7 +31,10 @@ public class Main extends Application {
 		
 		root.add(timer.getTimer(), 0, 0);
 		root.add(schedule.buildScheduleGUI(), 0, 1);
-			
+		
+		stage.setTitle("   TimeBlock");
+		stage.getIcons().add(new Image("icon.jpg")); 
+		stage.resizableProperty().setValue(Boolean.FALSE);
 		stage.setScene(scene);
 		stage.show();
 	}
