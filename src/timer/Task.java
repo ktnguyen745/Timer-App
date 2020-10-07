@@ -16,7 +16,7 @@ public class Task {
 	}
 	// toCSV
 	public String toCSV() {
-		return name + "," + time.toString();
+		return name + "," + time.getHours() + "," + time.getMinutes() + "," + time.getSeconds();
 	}
 	// run
 	public void run() {

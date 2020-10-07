@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -124,6 +126,31 @@ public class Schedule {
 		}
 	}
 
+	// Import from CSV file
+	public void importCSV(String filename) throws FileNotFoundException {
+		try(Scanner fileIn = new Scanner(new File(filename))){
+			while(fileIn.hasNextLine()) {
+				String[] line = fileIn.nextLine().split(",");
+				for(int i = 0; i < line.length; i++) {
+					if(line[i] == "" && i == 0) {
+						line[i] = "Task " + (i + 1);
+					} else if(line[i] == "" && i != 0) {
+						line[i] = "0";
+					}
+				}
+				addTask(line[0], Integer.parseInt(line[1]), 
+						Integer.parseInt(line[2]), Integer.parseInt(line[3]));
+			}
+
+
+		} catch (FileNotFoundException excpetion) {
+			Alert popup = new Alert(AlertType.ERROR);
+			popup.setTitle("Error");
+			popup.setHeaderText(".csv file could not be located.");
+			popup.showAndWait();		
+		}
+	}
+
 	// Getter Methods
 	public String name() {
 		return name;
@@ -195,7 +222,23 @@ public class Schedule {
 		EventHandler<ActionEvent> importCSVEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
-					writeToCSV();
+					Alert popup = new Alert(AlertType.INFORMATION);
+					popup.setTitle("Import .csv");
+					popup.setHeaderText("Enter filename");
+					
+					TextField fileNameField = new TextField();
+					fileNameField.setPromptText("Enter file name...");
+					
+					Label csvLabel = new Label(".csv");
+					
+					HBox box = new HBox();
+					box.getChildren().add(fileNameField);
+					box.getChildren().add(csvLabel);
+					
+					popup.getDialogPane().setContent(box);
+					popup.showAndWait();		
+					
+					importCSV(fileNameField.getText() + ".csv");
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
@@ -246,7 +289,7 @@ public class Schedule {
 				if(secondsField.getText() != "") {
 					seconds = Integer.parseInt(secondsField.getText());	
 				} 
-				
+
 				addTask(name, hours, minutes, seconds);
 			}
 		};
@@ -328,7 +371,7 @@ public class Schedule {
 		};
 		return removeTaskEvent;
 	}
-	
+
 	public Time getTotal() {
 		return total;
 	}
