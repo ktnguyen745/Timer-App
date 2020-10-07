@@ -1,38 +1,36 @@
 package timer;
 
 public class Task {
-
 	// Instance Variables
-	private Duration duration;
+	private Time time;
 	private String name;
 	private boolean isComplete;
 	
 	// Constructors
-	public Task(String name, Duration duration) {
+	public Task(String name, Time time) {
 		this.name = name;
-		this.duration = duration;
+		this.time = time;
 	}
-	
-	public void run() {
-		duration.start();
-	}
-	
 	// toString
 	public String toString() {
-		return name + " - " + duration.toString();
+		return name + " - " + time.toString();
 	}
-	
 	// toCSV
 	public String toCSV() {
-		return name + "," + duration.toString();
+		return name + "," + time.getHours() + "," + time.getMinutes() + "," + time.getSeconds();
+	}
+	// run
+	public void run() {
+//		time.start();
 	}
 	
+	
 	// Getters and Setters
-	public Duration duration() {
-		return duration;
+	public Time time() {
+		return time;
 	}
-	public void setDuration(Duration duration) {
-		this.duration = duration;
+	public void setTime(Time time) {
+		this.time = time;
 	}
 	public String name() {
 		return name;
