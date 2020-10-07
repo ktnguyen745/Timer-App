@@ -105,49 +105,51 @@ public class TimerGUI {
 					timeline.stop();
 				}
 				
-				time.setHours(schedule.tasks().get(0).time().getHours());
-				time.setMinutes(schedule.tasks().get(0).time().getMinutes());
-				time.setSeconds(schedule.tasks().get(0).time().getSeconds());
-				
-				timeline = new Timeline();
-				timeline.setCycleCount(Timeline.INDEFINITE);
-				timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-					// KeyFrame event handler
-					public void handle(ActionEvent event) {
-						if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
-							if(schedule.tasks().size() == count) {
-								timeline.stop();
+				if(schedule.tasks().size() > 0) {
+					time.setHours(schedule.tasks().get(0).time().getHours());
+					time.setMinutes(schedule.tasks().get(0).time().getMinutes());
+					time.setSeconds(schedule.tasks().get(0).time().getSeconds());
+					
+					timeline = new Timeline();
+					timeline.setCycleCount(Timeline.INDEFINITE);
+					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+						// KeyFrame event handler
+						public void handle(ActionEvent event) {
+							if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
+								if(schedule.tasks().size() == count) {
+									timeline.stop();
+								}
+								else {
+									time.setHours(schedule.tasks().get(count).time().getHours());
+									time.setMinutes(schedule.tasks().get(count).time().getMinutes());
+									time.setSeconds(schedule.tasks().get(count).time().getSeconds());
+									count++;
+								}
 							}
-							else {
-								time.setHours(schedule.tasks().get(count).time().getHours());
-								time.setMinutes(schedule.tasks().get(count).time().getMinutes());
-								time.setSeconds(schedule.tasks().get(count).time().getSeconds());
-								count++;
+							
+							// update timerLabel
+							hoursLabel.setText(format(time.getHours()) + " :");
+							minutesLabel.setText(format(time.getMinutes()) + " :");
+							secondsLabel.setText(format(time.getSeconds()));
+							
+							if (time.getHours() != 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
+								// hours--;
+								time.setHours(time.getHours() - 1);
+								// minutes = 60;
+								time.setMinutes(60);
 							}
+							if (time.getSeconds() == 0) {
+								// seconds = 60;
+								time.setSeconds(60);
+								// minutes--;
+								time.setMinutes(time.getMinutes() - 1);
+							}
+							// seconds--;
+							time.setSeconds(time.getSeconds() - 1);
 						}
-						
-						// update timerLabel
-						hoursLabel.setText(format(time.getHours()) + " :");
-						minutesLabel.setText(format(time.getMinutes()) + " :");
-						secondsLabel.setText(format(time.getSeconds()));
-						
-						if (time.getHours() != 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
-							// hours--;
-							time.setHours(time.getHours() - 1);
-							// minutes = 60;
-							time.setMinutes(60);
-						}
-						if (time.getSeconds() == 0) {
-							// seconds = 60;
-							time.setSeconds(60);
-							// minutes--;
-							time.setMinutes(time.getMinutes() - 1);
-						}
-						// seconds--;
-						time.setSeconds(time.getSeconds() - 1);
-					}
-				}));
-				timeline.playFromStart();
+					}));
+					timeline.playFromStart();	
+				}
 			}
 		});
 		stop.setOnAction(new EventHandler<ActionEvent>() {
