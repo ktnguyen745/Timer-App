@@ -72,8 +72,7 @@ public class TimerGUI {
 		;
 
 		for (Button button : buttonArray) {
-			button.setBackground(
-					new Background(new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), Insets.EMPTY)));
+			button.setBackground(new Background(new BackgroundFill(Color.rgb(121, 172, 222), new CornerRadii(10), Insets.EMPTY)));
 			button.setTextFill(Color.WHITE);
 			button.setStyle("-fx-font-size: 1em;");
 
@@ -124,6 +123,7 @@ public class TimerGUI {
 									|| go == false) {
 								if (schedule.tasks().size() == count || go == false) {
 									start.setOpacity(1);
+									stop.setOpacity(0.65);
 									timeline.stop();
 								} else {
 									time.setHours(schedule.tasks().get(count).time().getHours());
@@ -187,7 +187,7 @@ public class TimerGUI {
 		// gap between components is 20
 		HBox timerArea = new HBox(20);
 		timerArea.setBackground(
-				new Background(new BackgroundFill(Color.rgb(212, 117, 83), CornerRadii.EMPTY, Insets.EMPTY)));
+				new Background(new BackgroundFill(Color.rgb(192, 112, 181), CornerRadii.EMPTY, Insets.EMPTY)));
 		// center the components within HBox
 		timerArea.setAlignment(Pos.CENTER);
 		// Make it as wide as the application frame (scene)
