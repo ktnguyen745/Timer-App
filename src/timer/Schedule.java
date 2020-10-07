@@ -161,7 +161,7 @@ public class Schedule {
 	// 300x, 250y
 	public VBox buildScheduleGUI() {
 		VBox box = new VBox();
-		box.setBackground(new Background(new BackgroundFill(Color.rgb(192, 112, 181), CornerRadii.EMPTY, Insets.EMPTY)));
+		box.setBackground(new Background(new BackgroundFill(Color.rgb(208, 135, 200), CornerRadii.EMPTY, Insets.EMPTY)));
 		// Add top HBox
 		HBox topBar = new HBox();
 		Label scheduleLabel = new Label(name);
@@ -169,22 +169,22 @@ public class Schedule {
 		scheduleLabel.setStyle("-fx-font-size: 2em; -fx-font-weight: bold;");
 		scheduleLabel.setPrefWidth(120);
 		Button addButton = new Button("Add Task");
-		addButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		addButton.setBackground(new Background(new BackgroundFill(Color.rgb(121, 172, 222), new CornerRadii(10), Insets.EMPTY)));
 		addButton.setTextFill(Color.WHITE);
 		addButton.setStyle("-fx-font-weight: bold");
 		addButton.setPrefSize(80, 40);
 		Button csvButton = new Button("Create .csv");
-		csvButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		csvButton.setBackground(new Background(new BackgroundFill(Color.rgb(121, 172, 222), new CornerRadii(10), Insets.EMPTY)));
 		csvButton.setTextFill(Color.WHITE);
 		csvButton.setStyle("-fx-font-weight: bold");
 		csvButton.setPrefSize(80, 40);
 		Button importCsvButton = new Button("Import .csv");
-		importCsvButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		importCsvButton.setBackground(new Background(new BackgroundFill(Color.rgb(121, 172, 222), new CornerRadii(10), Insets.EMPTY)));
 		importCsvButton.setTextFill(Color.WHITE);
 		importCsvButton.setStyle("-fx-font-weight: bold");
 		importCsvButton.setPrefSize(80, 40);
 		Button deleteButton = new Button("Clear Tasks");
-		deleteButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		deleteButton.setBackground(new Background(new BackgroundFill(Color.rgb(121, 172, 222), new CornerRadii(10), Insets.EMPTY)));
 		deleteButton.setTextFill(Color.WHITE);
 		deleteButton.setStyle("-fx-font-weight: bold");
 		deleteButton.setPrefSize(80, 40);
@@ -309,7 +309,8 @@ public class Schedule {
 		Button moveButton = new Button("Swap");
 		moveButton.setPrefSize(60, 20);
 		moveButton.setOnAction(getReorderTasksEvent());
-		moveButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		moveButton.setBackground(new Background(new BackgroundFill(Color.rgb(206, 158, 215), new CornerRadii(10), Insets.EMPTY)));
+		moveButton.setTextFill(Color.WHITE);
 		moveButton.setId(String.valueOf(tasks.size() - 1));
 		Label taskName = new Label(name);
 		taskName.setAlignment(Pos.CENTER);
@@ -322,7 +323,8 @@ public class Schedule {
 		Button subButton = new Button("Remove");
 		subButton.setPrefSize(60, 20);
 		subButton.setOnAction(getRemoveTaskEvent());
-		subButton.setBackground(new Background(new BackgroundFill(Color.PALEVIOLETRED, new CornerRadii(10), Insets.EMPTY)));
+		subButton.setBackground(new Background(new BackgroundFill(Color.rgb(212, 132, 188), new CornerRadii(10), Insets.EMPTY)));
+		subButton.setTextFill(Color.WHITE);
 		subButton.setId(String.valueOf(tasks.size() - 1));
 		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
