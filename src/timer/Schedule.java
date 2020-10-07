@@ -53,8 +53,8 @@ public class Schedule {
 	}
 	
 	// Import from CSV file
-	public void importCSV() throws FileNotFoundException {
-		try(Scanner fileIn = new Scanner(new File("schedule.csv"))){
+	public void importCSV(String filename) throws FileNotFoundException {
+		try(Scanner fileIn = new Scanner(new File(filename))){
 			while(fileIn.hasNextLine()) {
 				String[] line = fileIn.nextLine().split(",");
 				for(int i = 0; i < line.length; i++) {
