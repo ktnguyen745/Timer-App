@@ -14,16 +14,9 @@ public class Time {
 	public Time(Integer hours, Integer minutes, Integer seconds) {
 		this.hours = hours;
 		this.minutes = minutes;
-		this.seconds = seconds + 1;
+		this.seconds = seconds;
 	}
-
-	private String format(Integer integer) {
-		if (integer < 10) {
-			return "0" + integer.toString();
-		}
-		return integer.toString();
-	}
-
+	
 	public Integer getHours() {
 		return hours;
 	}
@@ -48,6 +41,13 @@ public class Time {
 		this.seconds = seconds;
 	}
 
+	private String format(Integer integer) {
+		if (integer < 10) {
+			return "0" + integer.toString();
+		}
+		return integer.toString();
+	}
+	
 	public String toString() {
 		return format(hours) + ":" + format(minutes) + ":" + format(seconds);
 	}

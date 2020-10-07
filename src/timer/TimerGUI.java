@@ -34,11 +34,11 @@ public class TimerGUI {
 		this.schedule = schedule;
 	}
     
-	private String format(Integer time) {
-		if (time < 10) {
-			return "0" + time.toString();
+	private String format(Integer integer) {
+		if (integer < 10) {
+			return "0" + integer.toString();
 		}
-		return time.toString();
+		return integer.toString();
 	}
 	
 	public void setTime(Time time) {
