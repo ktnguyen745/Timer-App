@@ -172,6 +172,7 @@ public class TimerGUI {
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
+				// Updates TIme
 				time.setHours(schedule.tasks().get(count - 1).time().getHours());
 				time.setMinutes(schedule.tasks().get(count - 1).time().getMinutes());
 				time.setSeconds(schedule.tasks().get(count - 1).time().getSeconds());
