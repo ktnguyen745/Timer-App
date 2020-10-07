@@ -161,8 +161,7 @@ public class Schedule {
 	// 300x, 250y
 	public VBox buildScheduleGUI() {
 		VBox box = new VBox();
-		box.setBackground(new Background (new BackgroundFill(
-				Color.LIGHTPINK, CornerRadii.EMPTY, Insets.EMPTY)));
+		box.setBackground(new Background(new BackgroundFill(Color.rgb(192, 112, 181), CornerRadii.EMPTY, Insets.EMPTY)));
 		// Add top HBox
 		HBox topBar = new HBox();
 		Label scheduleLabel = new Label(name);

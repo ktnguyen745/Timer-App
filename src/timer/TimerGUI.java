@@ -187,7 +187,7 @@ public class TimerGUI {
 		// gap between components is 20
 		HBox timerArea = new HBox(20);
 		timerArea.setBackground(
-				new Background(new BackgroundFill(Color.rgb(212, 117, 83), CornerRadii.EMPTY, Insets.EMPTY)));
+				new Background(new BackgroundFill(Color.rgb(192, 112, 181), CornerRadii.EMPTY, Insets.EMPTY)));
 		// center the components within HBox
 		timerArea.setAlignment(Pos.CENTER);
 		// Make it as wide as the application frame (scene)
