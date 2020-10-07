@@ -5,6 +5,7 @@ public class Task {
 	private Time time;
 	private String name;
 	private boolean isComplete;
+	
 	// Constructors
 	public Task(String name, Time time) {
 		this.name = name;

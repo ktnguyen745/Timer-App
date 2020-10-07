@@ -22,13 +22,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class TimerGUI {
+	private Schedule schedule;
 	private Time time = new Time();
 	private Label minutesLabel = new Label();
 	private Label hoursLabel = new Label();
 	private Label secondsLabel = new Label();
 	private Timeline timeline = new Timeline();
 	private int count = 1;
-	private Schedule schedule;
+	private boolean go = false;
 	
 	public TimerGUI(Schedule schedule) {
 		this.schedule = schedule;
@@ -105,17 +106,21 @@ public class TimerGUI {
 					timeline.stop();
 				}
 				
-				time.setHours(schedule.tasks().get(0).time().getHours());
-				time.setMinutes(schedule.tasks().get(0).time().getMinutes());
-				time.setSeconds(schedule.tasks().get(0).time().getSeconds());
+				go = true;
+				
+				if(count == 1) {
+					time.setHours(schedule.tasks().get(0).time().getHours());
+					time.setMinutes(schedule.tasks().get(0).time().getMinutes());
+					time.setSeconds(schedule.tasks().get(0).time().getSeconds());
+				}
 				
 				timeline = new Timeline();
 				timeline.setCycleCount(Timeline.INDEFINITE);
 				timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 					// KeyFrame event handler
 					public void handle(ActionEvent event) {
-						if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0) {
-							if(schedule.tasks().size() == count) {
+						if (time.getHours() == 0 && time.getMinutes() == 0 && time.getSeconds() == 0 || go == false) {
+							if(schedule.tasks().size() == count || go == false) {
 								timeline.stop();
 							}
 							else {
@@ -154,20 +159,16 @@ public class TimerGUI {
 			@Override
 			public void handle(ActionEvent arg0) {
 				start.setOpacity(1);
-//				go = false;
+				go = false;
 			}
 		});
 
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-//				hours = initialHours;
-//				minutes = initialMinutes;
-//				seconds = initialSeconds;
-//
-//				hoursLabel.setText(format(hours) + " :");
-//				minutesLabel.setText(format(minutes) + " :");
-//				secondsLabel.setText(format(seconds));
+				time.setHours(schedule.tasks().get(count-1).time().getHours());
+				time.setMinutes(schedule.tasks().get(count-1).time().getMinutes());
+				time.setSeconds(schedule.tasks().get(count-1).time().getSeconds());
 			}
 
 		});
