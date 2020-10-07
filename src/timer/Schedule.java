@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -255,10 +257,10 @@ public class Schedule {
 				grid.add(secondsField, 1, 3);
 				
 				popup.getDialogPane().setContent(grid);
-				popup.showAndWait();		
+				Optional<ButtonType> result = popup.showAndWait();		
 				
 				String name = "Task";
-				if(nameField.getText() != null && nameField.getText() != "") {
+				if(nameField.getText() != null && nameField.getText().length() > 0) {
 					name = nameField.getText();		
 				} else {
 					name = "Task " + (tasks.size() + 1);
@@ -290,8 +292,8 @@ public class Schedule {
 						seconds = 0;
 					}
 				} 
-
-				addTask(name, hours, minutes, seconds);
+				
+				if(result.isPresent() && result.get() == ButtonType.OK) addTask(name, hours, minutes, seconds);
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
