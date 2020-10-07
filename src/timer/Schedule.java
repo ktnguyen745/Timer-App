@@ -35,18 +35,21 @@ public class Schedule {
 	private String name;
 	private Time total;
 	private VBox taskListBox;
+		
 	// Constructor
 	public Schedule(String name) {
 		this.name = name;
 		tasks = new ArrayList<Task>();
 		taskListBox = new VBox();
 	}
+	
 	// runSchedule
 	public void runSchedule() {		
 		//			total.start();
 		for(Task task : tasks) {
-			task.run();
-			try {
+			System.out.println(task.time());
+
+			try {				
 				Thread.sleep((task.time().getHours() * 3600000) + 
 						(task.time().getMinutes() * 60000) +
 						(task.time().getSeconds() * 1000));				
@@ -54,13 +57,13 @@ public class Schedule {
 				e.printStackTrace();
 			}
 			System.out.println("Task Complete");
+			
 		}
 		System.out.println("Schedule Complete");
 	}
 	// AddTask
 	public void addTask(String name, int hours, int minutes, int seconds) {
-		Time time = new Time();
-		time.setTimer(hours, minutes, seconds);
+		Time time = new Time(hours, minutes, seconds);
 		Task task = new Task(name, time);
 		tasks.add(task);
 		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
@@ -76,11 +79,9 @@ public class Schedule {
 				totalMinutes += (int) Math.floor(totalSeconds / 60);
 				totalSeconds = totalSeconds % 60;
 			}
-			total = new Time();
-			total.setTimer(totalHours, totalMinutes, totalSeconds);
+			total = new Time(totalHours, totalMinutes, totalSeconds);
 		} else {
-			total = new Time();
-			total.setTimer(hours, minutes, seconds);
+			total = new Time(hours, minutes, seconds);
 		}
 	}
 	// RemoveTask
@@ -97,13 +98,11 @@ public class Schedule {
 				totalMinutes--;
 				totalSeconds += 60;
 			}
-			total = new Time();
-			total.setTimer(totalHours, totalMinutes, totalSeconds);
+			total = new Time(totalHours, totalMinutes, totalSeconds);
 			tasks.remove(index);	
 		} 
 		if(tasks.size() == 0) {
 			total = new Time();
-			total.setTimer(0, 0, 0);
 		}
 	}
 	// ReorderTasks
@@ -305,8 +304,7 @@ public class Schedule {
 		return box;
 	}
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
-		Time time = new Time();
-		time.setTimer(hours, minutes, seconds);
+		Time time = new Time(hours, minutes, seconds);
 		HBox taskBox = new HBox();
 		taskBox.setId(String.valueOf(tasks.size() - 1));
 		Button moveButton = new Button("Swap");
