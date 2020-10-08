@@ -143,10 +143,8 @@ public class CountdownTimer {
 									restart = true; // Change to true to indicate the timer will be restarting.
 																		
 									timeline.stop();
-									// Otherwise, set timer to the next task in the Schedule
 								} else {
-									System.out.println(schedule.tasks().toString());
-									
+									// Otherwise, set timer to the next task in the Schedule
 									countdownTimer.setHours(schedule.tasks().get(count).time().getHours());
 									countdownTimer.setMinutes(schedule.tasks().get(count).time().getMinutes());
 									countdownTimer.setSeconds(schedule.tasks().get(count).time().getSeconds());
