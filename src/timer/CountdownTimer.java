@@ -27,9 +27,10 @@ public class CountdownTimer {
 	private Timeline timeline;
 	private Time countdownTimer = new Time();
 	private Schedule schedule; // The schedule users will be inputting into
-	private int count = 1; // Counts the number of arrayList objects in schedule, starting at 1
+	private int count = 0; // Counts the number of arrayList objects in schedule, starting at 1
 	private boolean go = false; // Stops the count down if it is set to false
-
+//	private boolean restart = false; 
+	
 	// Constructor
 	public CountdownTimer(Schedule schedule) {
 		this.schedule = schedule;
@@ -99,6 +100,11 @@ public class CountdownTimer {
 		// yet
 		stop.setOpacity(0.65);
 		reset.setOpacity(0.65);
+		
+		// Create a display for the task name so users know what task is being counted down
+		Label taskName = new Label();
+		taskName.setStyle("-fx-font-size: 1.25em;");
+		taskName.setTextFill(Color.WHITE);	
 
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -114,15 +120,7 @@ public class CountdownTimer {
 					// Set go to true to indicate the countdown timer should start
 					go = true;
 
-					// If the timer has just started, get the time of the first task to be completed
-					if (count == 1) {
-						timeline = new Timeline();
-
-						countdownTimer.setHours(schedule.tasks().get(0).time().getHours());
-						countdownTimer.setMinutes(schedule.tasks().get(0).time().getMinutes());
-						countdownTimer.setSeconds(schedule.tasks().get(0).time().getSeconds());
-					}
-
+					timeline = new Timeline();
 					timeline.setCycleCount(Timeline.INDEFINITE);
 					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
 						// KeyFrame event handler
@@ -132,7 +130,7 @@ public class CountdownTimer {
 								stop.setOpacity(0.65);
 								timeline.stop();
 							}
-
+							
 							if (countdownTimer.getHours() == 0 && countdownTimer.getMinutes() == 0
 									&& countdownTimer.getSeconds() == 0) {
 								// Stop the timer if go is false or each Task in Schedule has been counted down
@@ -140,16 +138,22 @@ public class CountdownTimer {
 									start.setOpacity(1);
 									stop.setOpacity(0.65);
 									reset.setOpacity(0.65);
-
-									count = 1; // Reset count
-
+									
+									count = 0; // Reset count
+																		
 									timeline.stop();
 									// Otherwise, set timer to the next task in the Schedule
 								} else {
-
+									System.out.println(schedule.tasks().toString());
+									
 									countdownTimer.setHours(schedule.tasks().get(count).time().getHours());
 									countdownTimer.setMinutes(schedule.tasks().get(count).time().getMinutes());
 									countdownTimer.setSeconds(schedule.tasks().get(count).time().getSeconds());
+									
+									taskName.setText(schedule.tasks().get(count).name());
+									
+//									restart = false;
+									
 									count++;
 								}
 							}
@@ -203,9 +207,9 @@ public class CountdownTimer {
 			public void handle(ActionEvent arg0) {
 				// When the reset button is pressed the time will be changed back to the
 				// original time
-				countdownTimer.setHours(schedule.tasks().get(count - 1).time().getHours());
-				countdownTimer.setMinutes(schedule.tasks().get(count - 1).time().getMinutes());
-				countdownTimer.setSeconds(schedule.tasks().get(count - 1).time().getSeconds());
+				countdownTimer.setHours(schedule.tasks().get(count).time().getHours());
+				countdownTimer.setMinutes(schedule.tasks().get(count).time().getMinutes());
+				countdownTimer.setSeconds(schedule.tasks().get(count).time().getSeconds());
 
 				// The change will be displayed immediately
 				hoursLabel.setText(countdownTimer.format(countdownTimer.getHours()) + " :");
@@ -222,11 +226,16 @@ public class CountdownTimer {
 		// Create a HBox to store the buttons. All elements inside of this HBox is centred.
 		HBox buttonsArea = new HBox(10);
 		buttonsArea.getChildren().addAll(start, stop, reset);
-		buttonsArea.setAlignment(Pos.CENTER);
+		buttonsArea.setAlignment(Pos.CENTER);	
+
+		HBox taskNameArea = new HBox();
+		taskNameArea.getChildren().addAll(taskName);
+		taskNameArea.setAlignment(Pos.CENTER);
 		
 		// Add both HBoxes to the root component
-		root.add(timerArea, 0, 0);
-		root.add(buttonsArea, 0, 1);
+		root.add(taskNameArea, 0, 0);
+		root.add(timerArea, 0, 1);
+		root.add(buttonsArea, 0, 2);
 
 		return root;
 	}

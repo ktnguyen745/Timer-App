@@ -4,7 +4,7 @@ package timer;
  * Time class is responsible for keeping track of hours, minutes and seconds
  */
 public class Time {
-	protected Integer hours;
+	private Integer hours;
 	private Integer minutes;
 	private Integer seconds;
 
