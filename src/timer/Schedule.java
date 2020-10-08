@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,6 +17,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -34,12 +36,14 @@ public class Schedule {
 	private String name;
 	private Time total;
 	private VBox taskListBox;
+	private ArrayList<Integer> swap;
 		
 	// Constructor
 	public Schedule(String name) {
 		this.name = name;
 		tasks = new ArrayList<Task>();
 		taskListBox = new VBox();
+		swap = new ArrayList<Integer>();
 	}
 	
 	// runSchedule
@@ -276,25 +280,39 @@ public class Schedule {
 				grid.add(new Label("Seconds:"), 0, 3);
 				grid.add(secondsField, 1, 3);
 				popup.getDialogPane().setContent(grid);
-				popup.showAndWait();		
+				Optional<ButtonType> result = popup.showAndWait();		
 				String name = "Task";
-				if(nameField.getText() != "") {
-					name = nameField.getText();
-				} 
+				if(nameField.getText() != null && nameField.getText().length() > 0) {
+					name = nameField.getText();		
+				} else {
+					name = "Task " + (tasks.size() + 1);
+				}
 				int hours = 0;
-				if(hoursField.getText() != "") {
-					hours = Integer.parseInt(hoursField.getText());
+				if(hoursField.getText() != null && hoursField.getText() != "") {
+					try {
+						hours = Integer.parseInt(hoursField.getText());
+					} catch (NumberFormatException exception) {
+						hours = 0;
+					}
 				} 
 				int minutes = 0;
-				if(minutesField.getText() != "") {
-					minutes = Integer.parseInt(minutesField.getText());
+				if(minutesField.getText() != null && minutesField.getText() != "") {
+					try {
+						minutes = Integer.parseInt(minutesField.getText());
+					} catch (NumberFormatException exception) {
+						minutes = 0;
+					}
 				} 
 				int seconds = 0;
-				if(secondsField.getText() != "") {
-					seconds = Integer.parseInt(secondsField.getText());	
+				if(secondsField.getText() != null && secondsField.getText() != "") {
+					try {
+						seconds = Integer.parseInt(secondsField.getText());
+					} catch (NumberFormatException exception) {
+						seconds = 0;
+					}
 				} 
-
-				addTask(name, hours, minutes, seconds);
+				
+				if(result.isPresent() && result.get() == ButtonType.OK) addTask(name, hours, minutes, seconds);
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
@@ -311,13 +329,23 @@ public class Schedule {
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
 		Time time = new Time(hours, minutes, seconds);
 		HBox taskBox = new HBox();
-		taskBox.setId(String.valueOf(tasks.size() - 1));
+		taskBox.setId(String.valueOf(taskListBox.getChildren().size()));
+		
+		DropShadow d = new DropShadow();
+		d.setColor(Color.PALEVIOLETRED);;
 		Button moveButton = new Button("Swap");
 		moveButton.setPrefSize(60, 20);
 		moveButton.setOnAction(getReorderTasksEvent());
 		moveButton.setBackground(new Background(new BackgroundFill(Color.rgb(206, 158, 215), new CornerRadii(10), Insets.EMPTY)));
 		moveButton.setTextFill(Color.WHITE);
-		moveButton.setId(String.valueOf(tasks.size() - 1));
+		moveButton.setId(String.valueOf(taskBox.getId()));
+		
+		moveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				moveButton.setEffect(d);
+			}
+		});
 		Label taskName = new Label(name);
 		taskName.setAlignment(Pos.CENTER);
 		taskName.setStyle("-fx-font-size: 1.2em;");
@@ -331,7 +359,7 @@ public class Schedule {
 		subButton.setOnAction(getRemoveTaskEvent());
 		subButton.setBackground(new Background(new BackgroundFill(Color.rgb(212, 132, 188), new CornerRadii(10), Insets.EMPTY)));
 		subButton.setTextFill(Color.WHITE);
-		subButton.setId(String.valueOf(tasks.size() - 1));
+		subButton.setId(String.valueOf(taskBox.getId()));
 		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskTime, new Insets(5, 5, 5, 5));
@@ -347,19 +375,19 @@ public class Schedule {
 		// two events in the schedule. 
 		EventHandler<ActionEvent> reorderTasksEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
-				//				String index = ((Button) e.getSource()).getId();
-				//				swap.add(Integer.parseInt(index));
-				//				if(swap.size() == 2) {
-				//					reorderTasks(swap.get(0), swap.get(1));
-				//					swap.clear();
-				//					
-				//					taskListBox.getChildren().clear();
-				//					
-				//					for(Task task : tasks) {
-				//						addTaskToGUI(task.name(), task.time().getHours(), task.time().getMinutes(),
-				//								task.time().getSeconds());
-				//					}
-				//				}
+				String index = ((Button) e.getSource()).getId();
+				swap.add(Integer.parseInt(index));
+				if(swap.size() == 2) {
+					reorderTasks(swap.get(0), swap.get(1));
+					swap.clear();
+
+					taskListBox.getChildren().clear();
+
+					for(Task task : tasks) {
+						taskListBox.getChildren().add(addTaskToGUI(task.name(), task.time().getHours(), 
+								task.time().getMinutes(), task.time().getSeconds()));
+					}
+				}
 			}
 		};
 		return reorderTasksEvent;
@@ -372,6 +400,13 @@ public class Schedule {
 				String index = ((Button) e.getSource()).getId();
 				removeTask(Integer.parseInt(index));
 				taskListBox.getChildren().remove(Integer.parseInt(index));
+				
+				taskListBox.getChildren().clear();
+
+				for(Task task : tasks) {
+					taskListBox.getChildren().add(addTaskToGUI(task.name(), task.time().getHours(), 
+							task.time().getMinutes(), task.time().getSeconds()));
+				}
 			}
 		};
 		return removeTaskEvent;
