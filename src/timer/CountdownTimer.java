@@ -29,7 +29,7 @@ public class CountdownTimer {
 	private Schedule schedule; // The schedule users will be inputting into
 	private int count = 0; // Counts the number of arrayList objects in schedule, starting at 1
 	private boolean go = false; // Stops the count down if it is set to false
-//	private boolean restart = false; 
+	private boolean restart = false; // If true, indicates that the timer will be restarting
 	
 	// Constructor
 	public CountdownTimer(Schedule schedule) {
@@ -132,7 +132,7 @@ public class CountdownTimer {
 							}
 							
 							if (countdownTimer.getHours() == 0 && countdownTimer.getMinutes() == 0
-									&& countdownTimer.getSeconds() == 0) {
+									&& countdownTimer.getSeconds() == 0 || restart == true) {
 								// Stop the timer if go is false or each Task in Schedule has been counted down
 								if (schedule.tasks().size() <= count) {
 									start.setOpacity(1);
@@ -140,6 +140,7 @@ public class CountdownTimer {
 									reset.setOpacity(0.65);
 									
 									count = 0; // Reset count
+									restart = true; // Change to true to indicate the timer will be restarting.
 																		
 									timeline.stop();
 									// Otherwise, set timer to the next task in the Schedule
@@ -150,9 +151,10 @@ public class CountdownTimer {
 									countdownTimer.setMinutes(schedule.tasks().get(count).time().getMinutes());
 									countdownTimer.setSeconds(schedule.tasks().get(count).time().getSeconds());
 									
+									// Set the task name to the current task
 									taskName.setText(schedule.tasks().get(count).name());
 									
-//									restart = false;
+									restart = false; 
 									
 									count++;
 								}
