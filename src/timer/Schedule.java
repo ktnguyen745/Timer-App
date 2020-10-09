@@ -34,7 +34,6 @@ public class Schedule {
 	// Instance Variables
 	private ArrayList<Task> tasks;
 	private String name;
-	private Time total;
 	private VBox taskListBox;
 	private ArrayList<Integer> swap;
 		
@@ -70,43 +69,12 @@ public class Schedule {
 		Task task = new Task(name, time);
 		tasks.add(task);
 		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
-		if (total != null) {
-			int totalHours = hours + total.getHours();
-			int totalMinutes = minutes + total.getMinutes();
-			if(totalMinutes >= 60) {
-				totalHours += (int) Math.floor(totalMinutes / 60);
-				totalMinutes = totalMinutes % 60; 
-			}
-			int totalSeconds = seconds + total.getSeconds();
-			if(totalSeconds >= 60) {
-				totalMinutes += (int) Math.floor(totalSeconds / 60);
-				totalSeconds = totalSeconds % 60;
-			}
-			total = new Time(totalHours, totalMinutes, totalSeconds);
-		} else {
-			total = new Time(hours, minutes, seconds);
-		}
 	}
 	// RemoveTask
 	public void removeTask(int index) {
 		if(tasks.size() >= index) {
-			int totalHours = total.getHours() - tasks.get(index).time().getHours();
-			int totalMinutes = total.getMinutes() - tasks.get(index).time().getMinutes();
-			if(totalMinutes < 0) {
-				totalHours--;
-				totalMinutes += 60;
-			}
-			int totalSeconds = total.getSeconds() - tasks.get(index).time().getSeconds();
-			if(totalSeconds < 0) {
-				totalMinutes--;
-				totalSeconds += 60;
-			}
-			total = new Time(totalHours, totalMinutes, totalSeconds);
 			tasks.remove(index);	
 		} 
-		if(tasks.size() == 0) {
-			total = new Time(0, 0, 0);
-		}
 
 	}
 	// ReorderTasks
@@ -164,9 +132,6 @@ public class Schedule {
 		return tasks;
 	}
 	
-	public Time total() {
-		return total;
-	}
 	// GUI Methods
 	// 300x, 250y
 	public VBox buildScheduleGUI() {
@@ -220,8 +185,17 @@ public class Schedule {
 			public void handle(ActionEvent e) {
 				try {
 					writeToCSV();
+					Alert csvSuccess = new Alert(AlertType.INFORMATION);
+					csvSuccess.setTitle("Success");
+					csvSuccess.setHeaderText("A .csv file was created");
+					csvSuccess.setContentText("Look for 'schedule.csv' in the project directory!");
+					csvSuccess.showAndWait();
 				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
+					Alert csvFail = new Alert(AlertType.ERROR);
+					csvFail.setTitle("Error");
+					csvFail.setHeaderText("An error has occurred");
+					csvFail.setContentText("No .csv file could be created.");
+					csvFail.showAndWait();
 				}
 			}
 		};
