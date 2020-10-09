@@ -412,7 +412,4 @@ public class Schedule {
 		return removeTaskEvent;
 	}
 
-	public Time getTotal() {
-		return total;
-	}
 }
