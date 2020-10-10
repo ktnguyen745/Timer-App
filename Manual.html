@@ -1,0 +1,32 @@
+<h2 id="timeblock-timer-application">TimeBlock Timer Application</h2>
+<h3 id="developed-by-kristy-nguyen-nguky053-and-matthew-bailey-baimy017"><em>Developed by Kristy Nguyen nguky053 and Matthew Bailey baimy017</em></h3>
+<p>TimeBlock is an application that enables a user to create a schedule of tasks that each last a certain length of time and then run a timer that counts down through each task in the schedule in order.</p>
+<p>This is an example of TimeBlock's graphical user interface.</p>
+<div class="figure">
+<img src="gui-example.png" title="The TimeBlock GUI" alt="An image of the TimeBlock GUI" /><p class="caption">An image of the TimeBlock GUI</p>
+</div>
+<h3 id="instructions">Instructions</h3>
+<h4 id="adding-a-task-to-the-schedule">Adding a Task to the Schedule</h4>
+<p>To add a task to the schedule, click the <em>Add Task</em> button and the following dialog will appear.</p>
+<div class="figure">
+<img src="newtask-example.png" title="The TimeBlock new task creation dialog" alt="An image of the TimeBlock Task Creation Dialog" /><p class="caption">An image of the TimeBlock Task Creation Dialog</p>
+</div>
+<p>Fill out the text fields with your desired values, or leave them blank for default values to be substituted, and then click &quot;ok&quot; to add the task to the schedule. You may cancel the task creation by exiting the window.</p>
+<h4 id="modifying-the-schedule">Modifying the Schedule</h4>
+<p>All tasks you create will have a <em>Swap</em> and a <em>Remove</em> button.</p>
+<ul>
+<li><p>The <em>Swap</em> button is used to reorder the tasks in the schedule. Clicking the <em>Swap</em> buttons of two different tasks will swap their position.</p></li>
+<li><p>The <em>Remove</em> button is used to remove a task from the schedule. Clicking the <em>Remove</em> button will delete the task.</p></li>
+</ul>
+<h4 id="using-.csv-files">Using .csv Files</h4>
+<p>Instead of adding tasks manually, you may click the <em>Import .csv</em> button to import a schedule from a .csv file. This will cause a dialog to appear where you enter the file's name without the .csv extension, which is added automatically.</p>
+<ul>
+<li><p>The .csv file you supply must follow a specific format with the task name, hours, minutes and seconds value each being separated by a comma.</p></li>
+<li><p>You can also create a .csv file from the current schedule using the <em>Create .csv</em> button. This creates a .csv file in the application directory called &quot;schedule.csv&quot; which matches the required format for the <em>Import .csv</em> button.</p></li>
+</ul>
+<h4 id="clearing-the-schedule">Clearing the Schedule</h4>
+<p>If you want to reset the schedule and start over, you can click the <em>Clear Tasks</em> button to instantly delete all tasks in the schedule.</p>
+<h3 id="timer-controls">Timer Controls</h3>
+<p>Once you have assembled your schedule, click the <em>Start</em> button beneath the timer to start the countdown. It will countdown through every task in the schedule until it reaches the end, where it will stop.</p>
+<p>If you need to pause the timer, clicking the <em>Stop</em> button will do so. Once you are ready to resume, simply click the <em>Start</em> button again.</p>
+<p>To restart the timer, click the <em>Reset</em> button.</p>
