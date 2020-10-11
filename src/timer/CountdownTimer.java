@@ -153,7 +153,6 @@ public class CountdownTimer {
 									taskName.setText(schedule.tasks().get(count).name());
 									
 									restart = false; 
-									
 									count++;
 								}
 							}
@@ -204,12 +203,12 @@ public class CountdownTimer {
 
 		reset.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) {
+			public void handle(ActionEvent arg0) {				
 				// When the reset button is pressed the time will be changed back to the
 				// original time
-				countdownTimer.setHours(schedule.tasks().get(count).time().getHours());
-				countdownTimer.setMinutes(schedule.tasks().get(count).time().getMinutes());
-				countdownTimer.setSeconds(schedule.tasks().get(count).time().getSeconds());
+				countdownTimer.setHours(schedule.tasks().get(count-1).time().getHours());
+				countdownTimer.setMinutes(schedule.tasks().get(count-1).time().getMinutes());
+				countdownTimer.setSeconds(schedule.tasks().get(count-1).time().getSeconds());
 
 				// The change will be displayed immediately
 				hoursLabel.setText(countdownTimer.format(countdownTimer.getHours()) + " :");
