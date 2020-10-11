@@ -30,6 +30,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * The Schedule class is responsible for storing, modifying and displaying a collection of tasks.
+ */
 public class Schedule {
 	// Instance Variables
 	private ArrayList<Task> tasks;
@@ -45,39 +48,30 @@ public class Schedule {
 		swap = new ArrayList<Integer>();
 	}
 	
-	// runSchedule
-	public void runSchedule() {		
-		//			total.start();
-		for(Task task : tasks) {
-			System.out.println(task.time());
 
-			try {				
-				Thread.sleep((task.time().getHours() * 3600000) + 
-						(task.time().getMinutes() * 60000) +
-						(task.time().getSeconds() * 1000));				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Task Complete");
-			
-		}
-		System.out.println("Schedule Complete");
-	}
-	// AddTask
+	/**
+	 * addTask method creates a Task object and adds it to the collection and GUI. 
+	 */
 	public void addTask(String name, int hours, int minutes, int seconds) {
 		Time time = new Time(hours, minutes, seconds);
 		Task task = new Task(name, time);
 		tasks.add(task);
 		taskListBox.getChildren().add(addTaskToGUI(name, hours, minutes, seconds));
 	}
-	// RemoveTask
+	
+	/**
+	 * removeTask method removes a Task object from the collection if it can be found.
+	 */
 	public void removeTask(int index) {
 		if(tasks.size() >= index) {
 			tasks.remove(index);	
 		} 
 
 	}
-	// ReorderTasks
+	
+	/**
+	 * reorderTasks method swaps the position of two Task objects in the collection.
+	 */
 	public boolean reorderTasks(int index1, int index2) {
 		if(tasks.get(index1) != null && tasks.get(index2) != null) {
 			Task tempTask = tasks.get(index2);
@@ -89,7 +83,10 @@ public class Schedule {
 	}
 
 	
-	// Export to CSV file
+	/**
+	 * writeToCSV method creates a new .csv file called schedule.csv and outputs all 
+	 * the tasks in the schedule to this file.
+	 */
 	public void writeToCSV() throws FileNotFoundException {
 		File csvFile = new File("schedule.csv");
 		try(PrintWriter writer = new PrintWriter(csvFile)){
@@ -99,7 +96,10 @@ public class Schedule {
 		}
 	}
 
-	// Import from CSV file
+	/**
+	 * importCSV attempts to import tasks from an existing csv file and add those tasks
+	 * to the schedule, creating a popup if an error occurs.
+	 */
 	public void importCSV(String filename) throws FileNotFoundException {
 		try(Scanner fileIn = new Scanner(new File(filename))){
 			while(fileIn.hasNextLine()) {
@@ -133,54 +133,72 @@ public class Schedule {
 	}
 	
 	// GUI Methods
-	// 300x, 250y
+	
+	/**
+	 * buildScheduleGUI creates the empty GUI container that will display the tasks 
+	 * and defines events used for the buttons. 
+	 */
 	public VBox buildScheduleGUI() {
 		VBox box = new VBox();
 		box.setBackground(new Background(new BackgroundFill(Color.rgb(172, 166, 240), CornerRadii.EMPTY, Insets.EMPTY)));
+		
 		// Add top HBox
 		HBox topBar = new HBox();
+		
 		Label scheduleLabel = new Label(name);
 		scheduleLabel.setTextFill(Color.WHITE);
 		scheduleLabel.setStyle("-fx-font-size: 2em; -fx-font-weight: bold;");
 		scheduleLabel.setPrefWidth(120);
+		
 		Button addButton = new Button("Add Task");
 		addButton.setBackground(new Background(new BackgroundFill(Color.rgb(202, 210, 243), new CornerRadii(10), Insets.EMPTY)));
 		addButton.setTextFill(Color.WHITE);
 		addButton.setStyle("-fx-font-weight: bold");
 		addButton.setPrefSize(80, 40);
+		
 		Button csvButton = new Button("Create .csv");
 		csvButton.setBackground(new Background(new BackgroundFill(Color.rgb(202, 210, 243), new CornerRadii(10), Insets.EMPTY)));
 		csvButton.setTextFill(Color.WHITE);
 		csvButton.setStyle("-fx-font-weight: bold");
 		csvButton.setPrefSize(80, 40);
+		
 		Button importCsvButton = new Button("Import .csv");
 		importCsvButton.setBackground(new Background(new BackgroundFill(Color.rgb(202, 210, 243), new CornerRadii(10), Insets.EMPTY)));
 		importCsvButton.setTextFill(Color.WHITE);
 		importCsvButton.setStyle("-fx-font-weight: bold");
 		importCsvButton.setPrefSize(80, 40);
+		
 		Button deleteButton = new Button("Clear Tasks");
 		deleteButton.setBackground(new Background(new BackgroundFill(Color.rgb(202, 210, 243), new CornerRadii(10), Insets.EMPTY)));
 		deleteButton.setTextFill(Color.WHITE);
 		deleteButton.setStyle("-fx-font-weight: bold");
 		deleteButton.setPrefSize(80, 40);
+		
 		HBox.setMargin(scheduleLabel, new Insets(5, 5, 5, 15));
 		HBox.setMargin(addButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(csvButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(importCsvButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(deleteButton, new Insets(5, 5, 5, 5));
+		
 		topBar.getChildren().add(scheduleLabel);
 		topBar.getChildren().add(addButton);
 		topBar.getChildren().add(csvButton);
 		topBar.getChildren().add(importCsvButton);
 		topBar.getChildren().add(deleteButton);
+		
 		box.getChildren().add(topBar);
+		
 		// Add ScrollPane
 		ScrollPane taskPane = new ScrollPane();
 		taskPane.hbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.NEVER);
 		taskPane.vbarPolicyProperty().setValue(ScrollPane.ScrollBarPolicy.ALWAYS);
 		taskPane.setContent(taskListBox);
 		box.getChildren().add(taskPane);
-		// This event will allow a button press to call the "export to csv" method
+		
+		/**
+		 * exportCSVEvent attempts to call the writeToCSV, creating a popup if the operation
+		 * succeeds or fails. 
+		 */
 		EventHandler<ActionEvent> exportCSVEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -200,7 +218,11 @@ public class Schedule {
 			}
 		};
 		csvButton.setOnAction(exportCSVEvent);
-		// This event will allow a button press to call the "import csv" method
+		
+		/**
+		 * importCSVEvent will create a popup that takes a string representing the name of
+		 * a .csv file and attempt to call importCSV using that name. 
+		 */
 		EventHandler<ActionEvent> importCSVEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				try {
@@ -227,34 +249,49 @@ public class Schedule {
 			}
 		};
 		importCsvButton.setOnAction(importCSVEvent);
-		// This event will create a popup that takes a name, hour, minutes and seconds,
-		// create a new task with those values and add it to the schedule.
+		
+		/**
+		 * addTaskEvent creates a popup that takes the parameters necessary to create a task,
+		 * those being a name and three integers representing its length in hours, minutes and seconds,
+		 * and then calls the addTask method with those four values.
+		 */
 		EventHandler<ActionEvent> addTaskEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				Alert popup = new Alert(AlertType.INFORMATION);
 				popup.setTitle("New Task");
 				popup.setHeaderText("New Task Creation Dialog");
+				
 				GridPane grid = new GridPane();
 				grid.setHgap(10);
 				grid.setVgap(10);
+				
 				TextField nameField = new TextField();
 				nameField.setPromptText("Enter task name...");
+				
 				TextField hoursField = new TextField();
 				hoursField.setPromptText("How many hours?");
+				
 				TextField minutesField = new TextField();
 				minutesField.setPromptText("How many minutes?");
+				
 				TextField secondsField = new TextField();
 				secondsField.setPromptText("How many seconds?");
+				
 				grid.add(new Label("Name:"), 0, 0);
 				grid.add(nameField, 1, 0);
+				
 				grid.add(new Label("Hours:"), 0, 1);
 				grid.add(hoursField, 1, 1);
+				
 				grid.add(new Label("Minutes:"), 0, 2);
 				grid.add(minutesField, 1, 2);
+				
 				grid.add(new Label("Seconds:"), 0, 3);
 				grid.add(secondsField, 1, 3);
+				
 				popup.getDialogPane().setContent(grid);
-				Optional<ButtonType> result = popup.showAndWait();		
+				Optional<ButtonType> result = popup.showAndWait();	
+				
 				String name = "Task";
 				if(nameField.getText() != null && nameField.getText().length() > 0) {
 					name = nameField.getText();		
@@ -290,7 +327,10 @@ public class Schedule {
 			}
 		};
 		addButton.setOnAction(addTaskEvent);
-		// This event will remove all tasks from the schedule.
+		
+		/**
+		 * clearScheduleEvent removes all tasks from the collection and the GUI.
+		 */
 		EventHandler<ActionEvent> clearScheduleEvent = new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				tasks.clear();
@@ -300,6 +340,10 @@ public class Schedule {
 		deleteButton.setOnAction(clearScheduleEvent);
 		return box;
 	}
+	
+	/**
+	 * addTaskToGUI adds a task and the accompanying buttons to the GUI.
+	 */
 	private HBox addTaskToGUI(String name, int hours, int minutes, int seconds) {
 		Time time = new Time(hours, minutes, seconds);
 		HBox taskBox = new HBox();
@@ -307,6 +351,7 @@ public class Schedule {
 		
 		DropShadow d = new DropShadow();
 		d.setColor(Color.PALEVIOLETRED);;
+		
 		Button moveButton = new Button("Swap");
 		moveButton.setPrefSize(60, 20);
 		moveButton.setOnAction(getReorderTasksEvent());
@@ -320,30 +365,41 @@ public class Schedule {
 				moveButton.setEffect(d);
 			}
 		});
+		
 		Label taskName = new Label(name);
 		taskName.setAlignment(Pos.CENTER);
 		taskName.setStyle("-fx-font-size: 1.2em;");
 		taskName.setPrefWidth(160);
+		
 		Label taskTime = new Label(time.toString());
 		taskTime.setAlignment(Pos.CENTER);
 		taskTime.setStyle("-fx-font-size: 1.2em;");
 		taskTime.setPrefWidth(160);
+		
 		Button subButton = new Button("Remove");
 		subButton.setPrefSize(60, 20);
 		subButton.setOnAction(getRemoveTaskEvent());
 		subButton.setBackground(new Background(new BackgroundFill(Color.rgb(171, 184, 241), new CornerRadii(10), Insets.EMPTY)));
 		subButton.setTextFill(Color.WHITE);
 		subButton.setId(String.valueOf(taskBox.getId()));
+		
 		HBox.setMargin(moveButton, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskName, new Insets(5, 5, 5, 5));
 		HBox.setMargin(taskTime, new Insets(5, 5, 5, 5));
 		HBox.setMargin(subButton, new Insets(5, 5, 5, 5));
+		
 		taskBox.getChildren().add(moveButton);
 		taskBox.getChildren().add(taskName);
 		taskBox.getChildren().add(taskTime);
 		taskBox.getChildren().add(subButton);
+		
 		return taskBox;
 	}
+	
+	/**
+	 * getReorderTasksEvent returns an EventHandler that will swap two tasks and change the
+	 * GUI to match the change to the schedule.
+	 */
 	private EventHandler<ActionEvent> getReorderTasksEvent(){
 		// This event will wait for a user to click another reorder button and then swap those
 		// two events in the schedule. 
@@ -366,6 +422,11 @@ public class Schedule {
 		};
 		return reorderTasksEvent;
 	}
+	
+	/**
+	 * getRemoveTaskEvent calls the removeTask method and changes the GUI to match
+	 * the change to the schedule. 
+	 */
 	private EventHandler<ActionEvent> getRemoveTaskEvent(){
 		// This event will take the index of the task at the button clicked and remove that
 		// task from the schedule.
